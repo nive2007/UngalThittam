@@ -118,6 +118,9 @@ def ask(data: dict):
         final_score = float(score) + bonus
 
         if final_score >= threshold:
+            # Boost Tamil Nadu schemes to the top of the valid results
+            if "tamil nadu" in text or "tamilnadu" in text:
+                final_score += 50.0
             results.append((i, final_score))
 
     results.sort(key=lambda x: x[1], reverse=True)
@@ -132,6 +135,8 @@ def ask(data: dict):
             "benefits": scheme.get('benefits', ''),
             "apply_link": scheme.get('apply link', ''),
             "ministry": scheme.get('ministries/departments', ''),
+            "application_process": scheme.get('application process', ''),
+            "documents_required": scheme.get('documents required', ''),
             "score": round(score, 3),
         })
 

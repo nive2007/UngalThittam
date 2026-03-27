@@ -17,9 +17,26 @@
       --accent2: #10b981;
       --accent3: #6366f1;
       --text: #f1f5f9;
+      --card-text: #cbd5e1;
       --muted: #94a3b8;
+      --dt-dot: rgba(255, 255, 255, 0.04);
+      --shadow-hover: rgba(0, 0, 0, 0.3);
       --tamil-font: 'Noto Sans Tamil', sans-serif;
       --body-font: 'Poppins', sans-serif;
+    }
+
+    body.light-theme {
+      --bg: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --card-border: rgba(203, 213, 225, 0.5);
+      --accent: #d97706;
+      --accent2: #059669;
+      --accent3: #4f46e5;
+      --text: #0f172a;
+      --card-text: #334155;
+      --muted: #64748b;
+      --dt-dot: rgba(0, 0, 0, 0.05);
+      --shadow-hover: rgba(0, 0, 0, 0.08);
     }
 
     * {
@@ -36,7 +53,27 @@
       overflow-x: hidden;
     }
 
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--card-border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
     /* Animated background */
+    @keyframes bgGlow {
+      0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+      50% { transform: scale(1.05) translate(-2%, 2%); opacity: 1; }
+      100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+    }
     body::before {
       content: '';
       position: fixed;
@@ -44,7 +81,8 @@
       background:
         radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
         radial-gradient(ellipse 60% 50% at 80% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 60%);
+      animation: bgGlow 15s ease-in-out infinite alternate;
       pointer-events: none;
       z-index: 0;
     }
@@ -54,7 +92,7 @@
       content: '';
       position: fixed;
       inset: 0;
-      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-image: radial-gradient(circle, var(--dt-dot) 1px, transparent 1px);
       background-size: 32px 32px;
       pointer-events: none;
       z-index: 0;
@@ -75,6 +113,10 @@
       animation: fadeDown 0.7s ease both;
     }
 
+    @keyframes emblemPulse {
+      0% { box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3); transform: translateY(0); }
+      100% { box-shadow: 0 12px 48px rgba(245, 158, 11, 0.6); transform: translateY(-3px); }
+    }
     .emblem {
       width: 72px;
       height: 72px;
@@ -86,6 +128,7 @@
       justify-content: center;
       font-size: 36px;
       box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+      animation: emblemPulse 3s infinite alternate ease-in-out;
     }
 
     header h1 {
@@ -136,20 +179,23 @@
 
     /* ── SEARCH BOX ── */
     .search-wrap {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1.5px solid var(--card-border);
       border-radius: 20px;
       padding: 10px 14px;
       display: flex;
       align-items: center;
       gap: 10px;
-      transition: border-color 0.3s, box-shadow 0.3s;
+      transition: all 0.3s ease;
       animation: fadeUp 0.7s 0.15s ease both;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     .search-wrap:focus-within {
       border-color: rgba(245, 158, 11, 0.5);
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1), 0 8px 32px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
     }
 
     #query {
@@ -238,17 +284,20 @@
       border-radius: 999px;
       border: 1.5px solid var(--card-border);
       background: var(--card-bg);
+      backdrop-filter: blur(8px);
       font-family: var(--tamil-font);
       font-size: 0.8rem;
       color: var(--muted);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .chip:hover {
       border-color: var(--accent2);
       color: var(--accent2);
       background: rgba(16, 185, 129, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
     }
 
     /* ── STATS BAR ── */
@@ -262,10 +311,18 @@
     .stat-card {
       flex: 1;
       background: var(--card-bg);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--card-border);
       border-radius: 14px;
       padding: 14px 16px;
       text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .stat-card .num {
@@ -307,14 +364,16 @@
 
     .scheme-card {
       background: var(--card-bg);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
       border-radius: 18px;
       padding: 22px 24px;
       margin-bottom: 14px;
-      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      transition: border-color 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
       animation: slideIn 0.4s ease both;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }
 
     .scheme-card::before {
@@ -329,9 +388,9 @@
     }
 
     .scheme-card:hover {
-      border-color: rgba(245, 158, 11, 0.3);
+      border-color: rgba(245, 158, 11, 0.4);
       transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 12px 32px var(--shadow-hover);
     }
 
     .card-header {
@@ -433,7 +492,7 @@
     .section-text {
       font-family: var(--tamil-font);
       font-size: 0.875rem;
-      color: #cbd5e1;
+      color: var(--card-text);
       line-height: 1.65;
     }
 
@@ -441,7 +500,9 @@
     .section-text.collapsed {
       display: -webkit-box;
       -webkit-line-clamp: 3;
+      line-clamp: 3;
       -webkit-box-orient: vertical;
+      box-orient: vertical;
       overflow: hidden;
     }
 
@@ -489,6 +550,39 @@
       transform: translateY(0);
     }
 
+    .action-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .apply-btn.secondary {
+      background: var(--card-bg);
+      border: 1.5px solid var(--accent);
+      color: var(--text);
+      box-shadow: none;
+    }
+    
+    .apply-btn.secondary:hover {
+      background: rgba(245, 158, 11, 0.1);
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+    }
+
+    .apply-box {
+      margin-top: 15px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: var(--bg);
+      border: 1px dashed var(--card-border);
+      display: none;
+      animation: fadeDown 0.3s ease both;
+    }
+    
+    .apply-box.open {
+      display: block;
+    }
+
     /* ── EMPTY / LOADING ── */
     .state-box {
       text-align: center;
@@ -514,6 +608,61 @@
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
+    }
+    
+    /* ── AUDIO CONTROLS ── */
+    #audio-controls {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--accent);
+      border-radius: 50px;
+      padding: 10px 20px;
+      display: none;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      animation: fadeUp 0.3s ease both;
+    }
+    .ctrl-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .ctrl-btn:hover {
+       transform: scale(1.15);
+       color: var(--accent);
+    }
+    .audio-waves {
+       display: flex;
+       align-items: center;
+       gap: 4px;
+       height: 20px;
+    }
+    .audio-waves span {
+       display: block;
+       width: 4px;
+       height: 100%;
+       background: var(--accent);
+       border-radius: 2px;
+       animation: wave 1s infinite alternate;
+    }
+    .audio-waves.paused span { animation-play-state: paused; }
+    .audio-waves span:nth-child(2) { animation-delay: 0.2s; }
+    .audio-waves span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes wave {
+      0% { height: 20%; }
+      100% { height: 100%; }
     }
 
     /* ── ANIMATIONS ── */
@@ -602,11 +751,16 @@
 
   <div class="container">
 
+    <!-- TOP BAR -->
+    <div style="display: flex; justify-content: flex-end; padding-top: 16px;">
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" style="background:var(--card-bg); border:1px solid var(--card-border); color:var(--text); width: 38px; height: 38px; font-size: 1.1rem; border-radius: 99px;">☀️</button>
+    </div>
+
     <!-- HEADER -->
-    <header>
+    <header style="padding-top: 16px;">
       <div class="emblem">🏛️</div>
       <h1>அரசு திட்டங்கள் <span>AI</span></h1>
-      <p>குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்</p>
+      <p id="ui-subtitle">குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்</p>
     </header>
 
     <!-- LANGUAGE TOGGLE -->
@@ -627,7 +781,7 @@
     <div class="voice-status" id="voiceStatus">🎙️ கேட்கிறேன்... பேசுங்கள்</div>
 
     <!-- QUICK CHIPS -->
-    <div class="chips">
+    <div class="chips" id="ui-chips">
       <div class="chip" onclick="quickSearch('விவசாயிகள் திட்டங்கள்')">🌾 விவசாயிகள்</div>
       <div class="chip" onclick="quickSearch('மாணவர் உதவித்தொகை')">🎓 மாணவர்கள்</div>
       <div class="chip" onclick="quickSearch('பெண்களுக்கான திட்டங்கள்')">👩 பெண்கள்</div>
@@ -640,15 +794,15 @@
     <div class="stats">
       <div class="stat-card">
         <div class="num">1000+</div>
-        <div class="label">திட்டங்கள்</div>
+        <div class="label" id="ui-stat1">திட்டங்கள்</div>
       </div>
       <div class="stat-card">
         <div class="num">AI</div>
-        <div class="label">திறன் வாய்ந்த தேடல்</div>
+        <div class="label" id="ui-stat2">திறன் வாய்ந்த தேடல்</div>
       </div>
       <div class="stat-card">
         <div class="num">3</div>
-        <div class="label">மொழிகள்</div>
+        <div class="label" id="ui-stat3">மொழிகள்</div>
       </div>
     </div>
 
@@ -657,12 +811,27 @@
     <div id="result"></div>
 
     <footer>
-      <p>இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.</p>
+      <p id="ui-footer">இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.</p>
     </footer>
 
   </div>
 
+  <div id="audio-controls">
+     <div class="audio-waves" id="audio-wave-anim">
+       <span></span><span></span><span></span>
+     </div>
+     <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" title="Pause/Play">⏸️</button>
+     <button class="ctrl-btn" onclick="stopAll()" title="Stop">⏹️</button>
+  </div>
+
   <script>
+    // ── THEME CONFIG ──
+    function toggleTheme() {
+       const isLight = document.body.classList.toggle('light-theme');
+       localStorage.setItem('govSchemeTheme', isLight ? 'light' : 'dark');
+       document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀️';
+    }
+
     // ── LANG CONFIG ──
     const LANGS = {
       ta: {
@@ -674,24 +843,44 @@
         searching: 'தேடுகிறோம்...',
         elig: 'தகுதி நிபந்தனைகள்',
         bene: 'பலன்கள்',
+        desc: 'விவரங்கள்',
+        apply_btn: '🌐 விண்ணப்பிக்க',
+        apply_how: '📝 விண்ணப்பிக்கும் முறை',
+        apply_steps: 'படிப்படியான வழிமுறைகள்',
+        doc_req: 'தேவையான ஆவணங்கள்',
         more: 'மேலும் படிக்க',
         less: 'குறைக்க',
         divider: 'முடிவுகள்',
-        lang: 'ta-IN'
+        lang: 'ta-IN',
+        logo_sub: 'குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்',
+        chips: ['🌾 விவசாயிகள்', '🎓 மாணவர்கள்', '👩 பெண்கள்', '💰 கடன் திட்டங்கள்', '🏥 முதியோர்', '🏠 வீட்டு உதவி'],
+        queries: ['விவசாயிகள் திட்டங்கள்', 'மாணவர் உதவித்தொகை', 'பெண்களுக்கான திட்டங்கள்', 'loan subsidy scheme', 'health scheme elderly', 'housing scheme poor'],
+        stats_labels: ['திட்டங்கள்', 'திறன் வாய்ந்த தேடல்', 'மொழிகள்'],
+        footer: 'இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.'
       },
       en: {
         placeholder: 'Ask about any government scheme...',
         listening: '🎙️ Listening... speak now',
         noResult: 'No schemes found',
         noResultSub: 'Try different keywords',
-        error: 'Backend error. Is the server running?',
+        error: 'Backend error.',
         searching: 'Searching...',
         elig: 'Eligibility',
         bene: 'Benefits',
+        desc: 'Description',
+        apply_btn: '🌐 Apply Now',
+        apply_how: '📝 How to Apply',
+        apply_steps: 'Application Process',
+        doc_req: 'Required Documents',
         more: 'Read more',
         less: 'Show less',
         divider: 'Results',
-        lang: 'en-IN'
+        lang: 'en-IN',
+        logo_sub: 'Easily discover government schemes using your voice',
+        chips: ['🌾 Farmers', '🎓 Students', '👩 Women', '💰 Loan Schemes', '🏥 Elderly', '🏠 Housing Help'],
+        queries: ['farmer schemes', 'student scholarship', 'women schemes', 'loan subsidy scheme', 'health scheme elderly', 'housing scheme poor'],
+        stats_labels: ['Schemes', 'AI Search', 'Languages'],
+        footer: 'This is an AI assistant. Please verify with official government websites.'
       },
       hi: {
         placeholder: 'कोई भी सरकारी योजना पूछें...',
@@ -702,21 +891,48 @@
         searching: 'खोज रहे हैं...',
         elig: 'पात्रता',
         bene: 'लाभ',
+        desc: 'विवरण',
+        apply_btn: '🌐 अभी आवेदन करें',
+        apply_how: '📝 आवेदन कैसे करें',
+        apply_steps: 'आवेदन प्रक्रिया',
+        doc_req: 'आवश्यक दस्तावेज़',
         more: 'और पढ़ें',
         less: 'कम करें',
         divider: 'परिणाम',
-        lang: 'hi-IN'
+        lang: 'hi-IN',
+        logo_sub: 'वॉयस के माध्यम से आसानी से सरकारी योजनाओं की खोज करें',
+        chips: ['🌾 किसान', '🎓 छात्र', '👩 महिलाएं', '💰 ऋण योजनाएं', '🏥 बुजुर्ग', '🏠 आवास सहायता'],
+        queries: ['farmer schemes', 'student scholarship', 'women schemes', 'loan subsidy scheme', 'health scheme elderly', 'housing scheme poor'],
+        stats_labels: ['योजनाएं', 'AI खोज', 'भाषाएं'],
+        footer: 'यह एक एआई सहायक है। सरकारी वेबसाइटों से सत्यापित करें।'
       }
     };
 
-    let currentLang = 'ta';
+    let currentLang = 'ta'; // Default
 
     function setLang(lang) {
+      if (!LANGS[lang]) lang = 'ta';
       currentLang = lang;
+      localStorage.setItem('govSchemeLang', lang);
       document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('btn-' + lang).classList.add('active');
-      document.getElementById('query').placeholder = LANGS[lang].placeholder;
-      document.getElementById('resultDivider').textContent = LANGS[lang].divider;
+      const btn = document.getElementById('btn-' + lang);
+      if (btn) btn.classList.add('active');
+      
+      const L = LANGS[lang];
+      document.getElementById('query').placeholder = L.placeholder;
+      document.getElementById('resultDivider').textContent = L.divider;
+      document.getElementById('ui-subtitle').textContent = L.logo_sub;
+      document.getElementById('ui-stat1').textContent = L.stats_labels[0];
+      document.getElementById('ui-stat2').textContent = L.stats_labels[1];
+      document.getElementById('ui-stat3').textContent = L.stats_labels[2];
+      document.getElementById('ui-footer').textContent = L.footer;
+      
+      const chipsHtml = L.chips.map((c, i) => `<div class="chip" onclick="quickSearch('${L.queries[i]}')">${c}</div>`).join('');
+      document.getElementById('ui-chips').innerHTML = chipsHtml;
+
+      if (typeof translateDynamicResults === 'function') {
+         translateDynamicResults(lang);
+      }
     }
 
     // ── VOICE RECOGNITION ──
@@ -819,40 +1035,86 @@
     // ── TTS ──
     let currentAudio = null;
     const translateCache = {};   // cache so same card doesn't re-translate
+    let isSpeechPaused = false;
+
+    function showAudioControls() {
+        const ctrl = document.getElementById('audio-controls');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const wave = document.getElementById('audio-wave-anim');
+        if (ctrl) ctrl.style.display = 'flex';
+        isSpeechPaused = false;
+        if (pauseBtn) pauseBtn.textContent = '⏸️';
+        if (wave) wave.classList.remove('paused');
+    }
+    
+    function hideAudioControls() {
+        const ctrl = document.getElementById('audio-controls');
+        if (ctrl) ctrl.style.display = 'none';
+        isSpeechPaused = false;
+    }
+    
+    function togglePauseSynthesis() {
+        const pauseBtn = document.getElementById('pauseBtn');
+        const wave = document.getElementById('audio-wave-anim');
+        
+        if (isSpeechPaused) {
+           window.speechSynthesis && window.speechSynthesis.resume();
+           if (currentAudio) currentAudio.play();
+           isSpeechPaused = false;
+           if (pauseBtn) pauseBtn.textContent = '⏸️';
+           if (wave) wave.classList.remove('paused');
+        } else {
+           window.speechSynthesis && window.speechSynthesis.pause();
+           if (currentAudio) currentAudio.pause();
+           isSpeechPaused = true;
+           if (pauseBtn) pauseBtn.textContent = '▶️';
+           if (wave) wave.classList.add('paused');
+        }
+    }
 
     function stopAll() {
       window.speechSynthesis && window.speechSynthesis.cancel();
       if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+      hideAudioControls();
+    }
+
+    // Helper to sequentially speak chunks using Browser TTS safely
+    function speakChunksBrowserSync(text, langCode, rate, btnEl) {
+      showAudioControls();
+      // Chunk text safely to avoid Chrome dropping bug
+      const chunks = chunkText(text, 150);
+      let i = 0;
+
+      function speakNext() {
+        while (i < chunks.length && !chunks[i].trim()) i++;
+        if (i >= chunks.length) {
+          if (btnEl) setBtnState(btnEl, false);
+          hideAudioControls();
+          return;
+        }
+
+        const utter = new SpeechSynthesisUtterance(chunks[i].trim());
+        utter.lang = langCode;
+        utter.rate = rate;
+        
+        let timeout = setTimeout(() => {
+          utter.onend = null;
+          i++; speakNext();
+        }, Math.max(3000, chunks[i].length * 100));
+
+        utter.onend = () => { clearTimeout(timeout); i++; speakNext(); };
+        utter.onerror = () => { clearTimeout(timeout); i++; speakNext(); };
+
+        window.speechSynthesis.speak(utter);
+      }
+      speakNext();
     }
 
     // 🔊 EN — read English text
     function speakEnglish(englishText, btnEl) {
       stopAll();
       setBtnState(btnEl, true, '🔊');
-      
-      // Chrome has a bug where utterances > ~200 chars are silently dropped or cancel halfway.
-      // We chunk by sentences.
-      const sentences = englishText.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [englishText];
-      let i = 0;
-      
-      function speakNext() {
-        if (i >= sentences.length) {
-          setBtnState(btnEl, false);
-          return;
-        }
-        const utter = new SpeechSynthesisUtterance(sentences[i].trim());
-        utter.lang = 'en-IN';
-        utter.rate = 0.88;
-        const voices = window.speechSynthesis.getVoices();
-        const v = voices.find(v => v.lang === 'en-IN') || voices.find(v => v.lang.startsWith('en'));
-        if (v) utter.voice = v;
-        
-        utter.onend = () => { i++; speakNext(); };
-        utter.onerror = () => { i++; speakNext(); };
-        window.speechSynthesis.speak(utter);
-      }
-      
-      speakNext();
+      speakChunksBrowserSync(englishText, 'en-IN', 0.88, btnEl);
     }
 
     // 🔊 தமிழ் — translate English→Tamil first, then speak
@@ -870,13 +1132,13 @@
             const data = await res.json();
             let translated = '';
             if (data && data[0]) {
-               for (let j = 0; j < data[0].length; j++) {
-                 if (data[0][j][0]) translated += data[0][j][0];
-               }
+              for (let j = 0; j < data[0].length; j++) {
+                if (data[0][j][0]) translated += data[0][j][0];
+              }
             }
             tamilText = translated || englishText;
             translateCache[englishText] = tamilText;
-          } catch(err) {
+          } catch (err) {
             console.error("Translation API error", err);
             tamilText = englishText;
           }
@@ -884,29 +1146,16 @@
 
         setBtnState(btnEl, true, '🔊');
 
-        // Play via Google Translate TTS audio in chunks ≤ 190 chars
         const chunks = chunkText(tamilText, 190);
-        await playChunksAsync(chunks);
-
+        const result = await playChunksAsync(chunks);
+        if (result === "fallback") throw new Error("Audio blocked");
+        
+        setBtnState(btnEl, false);
       } catch (e) {
         console.error('TTS error:', e);
-        // Fallback to browser TTS
-        const sentences = englishText.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [englishText];
-        let i = 0;
-        function speakNext() {
-          if (i >= sentences.length) { setBtnState(btnEl, false); return; }
-          const utter = new SpeechSynthesisUtterance(sentences[i].trim());
-          utter.lang = 'ta-IN';
-          utter.rate = 0.85;
-          utter.onend = () => { i++; speakNext(); };
-          utter.onerror = () => { i++; speakNext(); };
-          window.speechSynthesis.speak(utter);
-        }
-        speakNext();
-        return;
+        let textToRead = translateCache[englishText] || englishText;
+        speakChunksBrowserSync(textToRead, 'ta-IN', 0.85, btnEl);
       }
-      
-      setBtnState(btnEl, false);
     }
 
     function setBtnState(btn, active, icon) {
@@ -937,26 +1186,20 @@
       return new Promise((resolve) => {
         let idx = 0;
         function next() {
+          while (idx < chunks.length && !chunks[idx].trim()) idx++;
           if (idx >= chunks.length) { resolve(); return; }
-          const encoded = encodeURIComponent(chunks[idx++]);
+          const encoded = encodeURIComponent(chunks[idx++].trim());
           const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ta&client=tw-ob&q=${encoded}`;
           currentAudio = new Audio(url);
+          showAudioControls();
           currentAudio.onended = next;
-          currentAudio.onerror = () => {
-            // Google TTS blocked — fallback to browser
-            const u = new SpeechSynthesisUtterance(chunks.slice(idx - 1).join(' '));
-            u.lang = 'ta-IN'; u.rate = 0.85;
-            u.onend = resolve;
-            window.speechSynthesis.speak(u);
-          };
-          currentAudio.play().catch(() => {
-            const u = new SpeechSynthesisUtterance(chunks.join(' '));
-            u.lang = 'ta-IN'; u.rate = 0.85;
-            u.onend = resolve;
-            window.speechSynthesis.speak(u);
-          });
+          currentAudio.onerror = () => { hideAudioControls(); resolve("fallback"); };
+          currentAudio.play().catch(() => { hideAudioControls(); resolve("fallback"); });
         }
         next();
+      }).then((res) => {
+        if (res !== "fallback") hideAudioControls();
+        return res;
       });
     }
 
@@ -1040,7 +1283,8 @@
           const eligClean = cleanText(item.eligibility);
           const beneClean = cleanText(item.benefits);
           const descClean = cleanText(item.details || '');
-          const enText = fixRupee(`${item.name}. Description: ${descClean}. Eligibility: ${eligClean}. Benefits: ${beneClean}`);
+          const enText = fixRupee(`${item.name}. ${descClean}`);
+          const safeEnText = encodeURIComponent(enText);
 
           html += `
           <div class="scheme-card" style="animation-delay:${i * 0.06}s">
@@ -1049,43 +1293,67 @@
                <div class="card-title">${item.name || 'N/A'}</div>
             </div>
             <div class="tts-group card-tts">
-              <button class="tts-btn tts-en" data-label="EN"
-                onclick="speakEnglish(${JSON.stringify(enText)}, this)"
+              <button class="tts-btn tts-en" data-label="EN" data-text="${safeEnText}"
+                onclick="speakEnglish(decodeURIComponent(this.dataset.text), this)"
                 title="Read in English">🔊 EN</button>
-              <button class="tts-btn tts-ta" data-label="தமிழ்"
-                onclick="speakTamilTranslated(${JSON.stringify(enText)}, this)"
+              <button class="tts-btn tts-ta" data-label="தமிழ்" data-text="${safeEnText}"
+                onclick="speakTamilTranslated(decodeURIComponent(this.dataset.text), this)"
                 title="தமிழில் மொழிபெயர்த்து கேளுங்கள்">🔊 தமிழ்</button>
             </div>
 
             ${descClean && descClean !== '-' ? `
             <div class="card-section">
-              <div class="section-label" style="color:var(--accent)">📋 ${L.desc || 'விவரங்கள் / Details'}</div>
+              <div class="section-label desc" style="color:var(--accent)">📋 ${L.desc || 'விவரங்கள் / Details'}</div>
               <div class="section-text collapsed" id="${descId}">${textToHtml(item.details)}</div>
-              <button class="read-more" onclick="toggleText('${descId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+              <button class="read-more" onclick="toggleText('${descId}', this)">${L.more} ↓</button>
             </div>` : ''}
 
             <div class="card-section">
               <div class="section-label elig">✅ ${L.elig}</div>
               <div class="section-text collapsed" id="${eligId}">${textToHtml(item.eligibility)}</div>
-              <button class="read-more" onclick="toggleText('${eligId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+              <button class="read-more" onclick="toggleText('${eligId}', this)">${L.more} ↓</button>
             </div>
 
             <div class="card-section">
               <div class="section-label bene">🎁 ${L.bene}</div>
               <div class="section-text collapsed" id="${beneId}">${textToHtml(item.benefits)}</div>
-              <button class="read-more" onclick="toggleText('${beneId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+              <button class="read-more" onclick="toggleText('${beneId}', this)">${L.more} ↓</button>
             </div>
 
-            ${item.apply_link ? `
-            <div class="card-footer">
-              <a class="apply-btn" href="${item.apply_link}" target="_blank" rel="noopener noreferrer">
-                🔗 விண்ணப்பிக்க / Apply Now
-              </a>
+            <div class="action-btn-row">
+               ${item.apply_link ? `
+               <a class="apply-btn" href="${item.apply_link}" target="_blank" rel="noopener noreferrer">
+                 ${L.apply_btn || '🌐 Apply Now'}
+               </a>` : ''}
+               
+               ${(item.application_process && item.application_process !== '-' || item.documents_required && item.documents_required !== '-') ? `
+               <button class="apply-btn secondary" data-label="${L.apply_how || '📝 How to Apply'}" onclick="toggleApplyBox('apply-box-${i}', this)">
+                 ${L.apply_how || '📝 How to Apply'}
+               </button>
+               ` : ''}
+            </div>
+            
+            ${(item.application_process && item.application_process !== '-' || item.documents_required && item.documents_required !== '-') ? `
+            <div class="apply-box" id="apply-box-${i}">
+              ${item.application_process && item.application_process !== '-' ? `
+                 <div class="section-label apply-steps" style="color:var(--accent2)">📋 ${L.apply_steps || 'Application Process'}</div>
+                 <div class="section-text" style="display:block; margin-bottom:12px;">${textToHtml(item.application_process)}</div>
+              ` : ''}
+              ${item.documents_required && item.documents_required !== '-' ? `
+                 <div class="section-label doc-req" style="color:var(--accent3)">📄 ${L.doc_req || 'Documents Required'}</div>
+                 <div class="section-text" style="display:block;">${textToHtml(item.documents_required)}</div>
+              ` : ''}
             </div>` : ''}
+
           </div>`;
         });
 
         resultDiv.innerHTML = html;
+
+        // Kick off translation for the new cards immediately
+        if (typeof translateDynamicResults === 'function') {
+           translateDynamicResults(currentLang);
+        }
 
       } catch (err) {
         resultDiv.innerHTML = `
@@ -1096,21 +1364,146 @@
       }
     }
 
+    function toggleApplyBox(id, btn) {
+       stopAll();
+       const box = document.getElementById(id);
+       const isOpen = box.classList.contains('open');
+       
+       if (isOpen) {
+          box.classList.remove('open');
+          setBtnState(btn, false);
+       } else {
+          // Close others
+          document.querySelectorAll('.apply-box.open').forEach(b => b.classList.remove('open'));
+          
+          box.classList.add('open');
+          setBtnState(btn, true, '🔊');
+          
+          let fullText = '';
+          const stepsL = box.querySelector('.apply-steps');
+          const docsL = box.querySelector('.doc-req');
+          const textBlocks = box.querySelectorAll('.section-text');
+          
+          if (stepsL && textBlocks[0]) fullText += stepsL.innerText + '. ' + textBlocks[0].innerText + '. ';
+          if (docsL && textBlocks.length > 1) fullText += docsL.innerText + '. ' + textBlocks[1].innerText + '. ';
+          else if (docsL && textBlocks.length === 1 && !stepsL) fullText += docsL.innerText + '. ' + textBlocks[0].innerText + '. ';
+          
+          let langCode = 'en-IN';
+          if (currentLang === 'ta') langCode = 'ta-IN';
+          if (currentLang === 'hi') langCode = 'hi-IN';
+          
+          speakChunksBrowserSync(fullText, langCode, 0.85, btn);
+       }
+    }
+
     // ── READ MORE TOGGLE ──
-    function toggleText(id, btn, more, less) {
+    function toggleText(id, btn) {
+      const L = LANGS[currentLang];
       const el = document.getElementById(id);
       if (el.classList.contains('collapsed')) {
         el.classList.remove('collapsed');
-        btn.textContent = less + ' ↑';
+        btn.textContent = L.less + ' ↑';
+        
+        // Auto-narrate content when expanded!
+        stopAll();
+        let langCode = 'en-IN';
+        if (currentLang === 'ta') langCode = 'ta-IN';
+        if (currentLang === 'hi') langCode = 'hi-IN';
+        speakChunksBrowserSync(el.innerText, langCode, 0.85, null);
+        
       } else {
         el.classList.add('collapsed');
-        btn.textContent = more + ' ↓';
+        btn.textContent = L.more + ' ↓';
+        stopAll();
       }
     }
 
-    // ── ENTER KEY ──
+    // ── TRANSLATION PIPELINE ──
+    async function translateToLang(text, targetLang) {
+      if (!text || text === '-') return text;
+      if (targetLang === 'en') return text;
+      
+      const cacheKey = targetLang + ':' + text;
+      if (translateCache[cacheKey]) return translateCache[cacheKey];
+
+      try {
+        const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        let translated = '';
+        if (data && data[0]) {
+          for (let j = 0; j < data[0].length; j++) {
+            if (data[0][j][0]) translated += data[0][j][0];
+          }
+        }
+        translated = translated || text;
+        translateCache[cacheKey] = translated;
+        return translated;
+      } catch (err) {
+        console.error("Translation API error", err);
+        return text; // Fallback to english source
+      }
+    }
+
+    async function translateDynamicResults(targetLang) {
+       const L = LANGS[targetLang];
+       const resultDiv = document.getElementById('result');
+       if (!resultDiv) return;
+
+       // Translate labels instantly
+       document.querySelectorAll('.section-label.elig').forEach(el => el.innerHTML = `✅ ${L.elig}`);
+       document.querySelectorAll('.section-label.bene').forEach(el => el.innerHTML = `🎁 ${L.bene}`);
+       document.querySelectorAll('.section-label.desc').forEach(el => el.innerHTML = `📋 ${L.desc}`);
+       document.querySelectorAll('.section-label.apply-steps').forEach(el => el.innerHTML = `📋 ${L.apply_steps}`);
+       document.querySelectorAll('.section-label.doc-req').forEach(el => el.innerHTML = `📄 ${L.doc_req}`);
+       
+       document.querySelectorAll('.read-more').forEach(el => {
+          if (el.textContent.includes('↓')) el.textContent = `${L.more} ↓`;
+          else el.textContent = `${L.less} ↑`;
+       });
+       document.querySelectorAll('.apply-btn:not(.secondary)').forEach(el => el.innerHTML = L.apply_btn);
+       document.querySelectorAll('.apply-btn.secondary').forEach(el => {
+          el.dataset.label = L.apply_how;
+          if (!el.disabled) el.innerHTML = L.apply_how;
+          else el.innerHTML = '🔊 ' + L.apply_how;
+       });
+
+       if (targetLang === 'en') {
+          document.querySelectorAll('.card-title, .section-text').forEach(el => {
+             if (el.dataset.origText) el.innerHTML = el.dataset.origText.replace(/\n/g, '<br>');
+          });
+          return;
+       }
+
+       // Translate dynamic texts asynchronously
+       const elements = document.querySelectorAll('.card-title, .section-text');
+       for (let el of elements) {
+          if (el.dataset.translated === targetLang) continue;
+          
+          let origText = el.dataset.origText;
+          if (!origText) {
+             origText = el.innerText;
+             el.dataset.origText = origText;
+          }
+
+          let translatedText = await translateToLang(origText, targetLang);
+          el.innerHTML = translatedText.replace(/\n/g, '<br>');
+          el.dataset.translated = targetLang;
+       }
+    }
+
+    // ── INITIALIZATION ──
     document.getElementById('query').addEventListener('keydown', e => {
       if (e.key === 'Enter') search();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('govSchemeTheme') === 'light') {
+         document.body.classList.add('light-theme');
+         document.getElementById('themeBtn').textContent = '🌙';
+      }
+      const savedLang = localStorage.getItem('govSchemeLang') || 'ta';
+      setLang(savedLang);
     });
   </script>
 </body>
