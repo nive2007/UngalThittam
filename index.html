@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="ta">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>அரசு திட்டங்கள் AI | GovScheme AI</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --card-bg: rgba(255, 255, 255, 0.04);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #f59e0b;
+      --accent2: #10b981;
+      --accent3: #6366f1;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --tamil-font: 'Noto Sans Tamil', sans-serif;
+      --body-font: 'Poppins', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--body-font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Dot grid */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+
+    /* ── HEADER ── */
+    header {
+      text-align: center;
+      padding: 52px 0 36px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .emblem {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 18px;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+    }
+
+    header h1 {
+      font-family: var(--tamil-font);
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.3;
+    }
+
+    header h1 span {
+      color: var(--accent);
+    }
+
+    header p {
+      font-family: var(--tamil-font);
+      color: var(--muted);
+      margin-top: 8px;
+      font-size: 0.95rem;
+    }
+
+    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 0 0 28px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .lang-btn {
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-family: var(--body-font);
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    /* ── SEARCH BOX ── */
+    .search-wrap {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid var(--card-border);
+      border-radius: 20px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+
+    .search-wrap:focus-within {
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
+    }
+
+    #query {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: var(--tamil-font);
+      padding: 6px 4px;
+    }
+
+    #query::placeholder {
+      color: var(--muted);
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mic-btn {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent);
+    }
+
+    .mic-btn:hover {
+      background: rgba(245, 158, 11, 0.22);
+      transform: scale(1.05);
+    }
+
+    .mic-btn.listening {
+      background: var(--accent);
+      color: #000;
+      animation: pulse 1s infinite;
+    }
+
+    .search-btn {
+      background: var(--accent);
+      color: #000;
+      font-weight: 600;
+    }
+
+    .search-btn:hover {
+      background: #d97706;
+      transform: scale(1.05);
+    }
+
+    /* ── VOICE STATUS ── */
+    .voice-status {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.83rem;
+      font-family: var(--tamil-font);
+      color: var(--accent);
+      height: 20px;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .voice-status.show {
+      opacity: 1;
+    }
+
+    /* ── QUICK CHIPS ── */
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    .chip {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1.5px solid var(--card-border);
+      background: var(--card-bg);
+      font-family: var(--tamil-font);
+      font-size: 0.8rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      border-color: var(--accent2);
+      color: var(--accent2);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    /* ── STATS BAR ── */
+    .stats {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      animation: fadeUp 0.7s 0.25s ease both;
+    }
+
+    .stat-card {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .stat-card .num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .stat-card .label {
+      font-family: var(--tamil-font);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 28px 0 20px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-family: var(--tamil-font);
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+    }
+
+    /* ── RESULT CARDS ── */
+    #result {
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .scheme-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      animation: slideIn 0.4s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scheme-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      border-radius: 4px 0 0 4px;
+    }
+
+    .scheme-card:hover {
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .card-tts {
+      margin-bottom: 14px;
+      justify-content: flex-end;
+    }
+
+    .card-index {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: var(--tamil-font);
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.4;
+      flex: 1;
+    }
+
+    .tts-btn {
+      background: rgba(99, 102, 241, 0.12);
+      border: none;
+      border-radius: 8px;
+      color: var(--accent3);
+      cursor: pointer;
+      padding: 5px 10px;
+      font-size: 0.78rem;
+      font-family: var(--body-font);
+      font-weight: 600;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .tts-btn:hover {
+      background: rgba(99, 102, 241, 0.25);
+    }
+
+    .tts-en {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--accent2);
+    }
+
+    .tts-en:hover {
+      background: rgba(16, 185, 129, 0.22);
+    }
+
+    .tts-ta {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+
+    .tts-ta:hover {
+      background: rgba(245, 158, 11, 0.22);
+    }
+
+    .tts-group {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .card-section {
+      margin-top: 12px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .section-label.elig {
+      color: var(--accent2);
+    }
+
+    .section-label.bene {
+      color: var(--accent3);
+    }
+
+    .section-text {
+      font-family: var(--tamil-font);
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      line-height: 1.65;
+    }
+
+    /* collapsed */
+    .section-text.collapsed {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .read-more {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.78rem;
+      cursor: pointer;
+      margin-top: 4px;
+      font-family: var(--body-font);
+      padding: 0;
+    }
+
+    /* ── APPLY BUTTON ── */
+    .card-footer {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .apply-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 20px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      font-family: var(--tamil-font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.22s;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    }
+
+    .apply-btn:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    .apply-btn:active {
+      transform: translateY(0);
+    }
+
+    /* ── EMPTY / LOADING ── */
+    .state-box {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--muted);
+      font-family: var(--tamil-font);
+    }
+
+    .state-box .icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .state-box p {
+      font-size: 0.95rem;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.08);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.5);
+      }
+
+      50% {
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 28px 0 0;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: var(--tamil-font);
+      border-top: 1px solid var(--card-border);
+      margin-top: 40px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 500px) {
+      .stats {
+        flex-direction: column;
+      }
+
+      .stat-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <header>
+      <div class="emblem">🏛️</div>
+      <h1>அரசு திட்டங்கள் <span>AI</span></h1>
+      <p>குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்</p>
+    </header>
+
+    <!-- LANGUAGE TOGGLE -->
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('ta')" id="btn-ta">தமிழ்</button>
+      <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+      <button class="lang-btn" onclick="setLang('hi')" id="btn-hi">हिंदी</button>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <span style="font-size:1.1rem; color: var(--muted);">🔎</span>
+      <input type="text" id="query" placeholder="உங்கள் கேள்வியை இங்கே கேளுங்கள்..." />
+      <button class="icon-btn mic-btn" id="micBtn" onclick="startVoice()" title="குரல் உள்ளீடு">🎤</button>
+      <button class="icon-btn search-btn" onclick="search()" title="தேடு">→</button>
+    </div>
+
+    <div class="voice-status" id="voiceStatus">🎙️ கேட்கிறேன்... பேசுங்கள்</div>
+
+    <!-- QUICK CHIPS -->
+    <div class="chips">
+      <div class="chip" onclick="quickSearch('விவசாயிகள் திட்டங்கள்')">🌾 விவசாயிகள்</div>
+      <div class="chip" onclick="quickSearch('மாணவர் உதவித்தொகை')">🎓 மாணவர்கள்</div>
+      <div class="chip" onclick="quickSearch('பெண்களுக்கான திட்டங்கள்')">👩 பெண்கள்</div>
+      <div class="chip" onclick="quickSearch('loan subsidy scheme')">💰 கடன் திட்டங்கள்</div>
+      <div class="chip" onclick="quickSearch('health scheme elderly')">🏥 முதியோர்</div>
+      <div class="chip" onclick="quickSearch('housing scheme poor')">🏠 வீட்டு உதவி</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="num">1000+</div>
+        <div class="label">திட்டங்கள்</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">AI</div>
+        <div class="label">திறன் வாய்ந்த தேடல்</div>
+      </div>
+      <div class="stat-card">
+        <div class="num">3</div>
+        <div class="label">மொழிகள்</div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="divider" id="resultDivider" style="display:none">முடிவுகள்</div>
+    <div id="result"></div>
+
+    <footer>
+      <p>இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // ── LANG CONFIG ──
+    const LANGS = {
+      ta: {
+        placeholder: 'உங்கள் கேள்வியை இங்கே கேளுங்கள்...',
+        listening: '🎙️ கேட்கிறேன்... பேசுங்கள்',
+        noResult: 'எந்த திட்டமும் கிடைக்கவில்லை',
+        noResultSub: 'வேறு வார்த்தைகளில் தேடுங்கள்',
+        error: 'பின்தளத்தில் பிழை ஏற்பட்டது',
+        searching: 'தேடுகிறோம்...',
+        elig: 'தகுதி நிபந்தனைகள்',
+        bene: 'பலன்கள்',
+        more: 'மேலும் படிக்க',
+        less: 'குறைக்க',
+        divider: 'முடிவுகள்',
+        lang: 'ta-IN'
+      },
+      en: {
+        placeholder: 'Ask about any government scheme...',
+        listening: '🎙️ Listening... speak now',
+        noResult: 'No schemes found',
+        noResultSub: 'Try different keywords',
+        error: 'Backend error. Is the server running?',
+        searching: 'Searching...',
+        elig: 'Eligibility',
+        bene: 'Benefits',
+        more: 'Read more',
+        less: 'Show less',
+        divider: 'Results',
+        lang: 'en-IN'
+      },
+      hi: {
+        placeholder: 'कोई भी सरकारी योजना पूछें...',
+        listening: '🎙️ सुन रहा हूँ... बोलिए',
+        noResult: 'कोई योजना नहीं मिली',
+        noResultSub: 'अलग शब्दों में खोजें',
+        error: 'बैकएंड त्रुटि',
+        searching: 'खोज रहे हैं...',
+        elig: 'पात्रता',
+        bene: 'लाभ',
+        more: 'और पढ़ें',
+        less: 'कम करें',
+        divider: 'परिणाम',
+        lang: 'hi-IN'
+      }
+    };
+
+    let currentLang = 'ta';
+
+    function setLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btn-' + lang).classList.add('active');
+      document.getElementById('query').placeholder = LANGS[lang].placeholder;
+      document.getElementById('resultDivider').textContent = LANGS[lang].divider;
+    }
+
+    // ── VOICE RECOGNITION ──
+    let recognition = null;
+    let isListening = false;
+    let finalTranscript = '';
+
+    function startVoice() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('உங்கள் browser-ல் voice recognition இல்லை. Chrome பயன்படுத்தவும்.');
+        return;
+      }
+
+      // Stop if already listening
+      if (isListening) {
+        recognition && recognition.abort();
+        stopVoiceUI();
+        return;
+      }
+
+      finalTranscript = '';
+      recognition = new SpeechRecognition();
+
+      // ✅ Always use the selected language — for Tamil: ta-IN
+      recognition.lang = LANGS[currentLang].lang;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 3;   // get multiple guesses, pick best
+      recognition.continuous = false;    // one utterance at a time (more stable)
+
+      const micBtn = document.getElementById('micBtn');
+      const status = document.getElementById('voiceStatus');
+      const queryEl = document.getElementById('query');
+
+      recognition.onstart = () => {
+        isListening = true;
+        micBtn.classList.add('listening');
+        micBtn.textContent = '⏹';
+        status.textContent = LANGS[currentLang].listening;
+        status.classList.add('show');
+      };
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            // Pick the alternative with highest confidence
+            let best = event.results[i][0];
+            for (let j = 1; j < event.results[i].length; j++) {
+              if (event.results[i][j].confidence > best.confidence) best = event.results[i][j];
+            }
+            finalTranscript += best.transcript;
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        // Show live interim text as user speaks
+        queryEl.value = finalTranscript || interim;
+      };
+
+      recognition.onerror = (e) => {
+        // "no-speech" is common — just show a friendly nudge
+        if (e.error === 'no-speech') {
+          status.textContent = '🔇 குரல் கிடைக்கவில்லை — மீண்டும் முயற்சிக்கவும்';
+        } else if (e.error === 'not-allowed') {
+          status.textContent = '🚫 Microphone அனுமதி தேவை';
+        } else {
+          status.textContent = '❌ பிழை: ' + e.error;
+        }
+        setTimeout(() => status.classList.remove('show'), 3000);
+        stopVoiceUI();
+      };
+
+      recognition.onend = () => {
+        stopVoiceUI();
+        // Auto-search once we have a final result
+        if (finalTranscript.trim()) {
+          queryEl.value = finalTranscript.trim();
+          search();
+        }
+      };
+
+      try {
+        recognition.start();
+      } catch (e) {
+        status.textContent = '❌ Microphone தொடங்கவில்லை';
+        status.classList.add('show');
+        setTimeout(() => status.classList.remove('show'), 3000);
+      }
+    }
+
+    function stopVoiceUI() {
+      isListening = false;
+      const micBtn = document.getElementById('micBtn');
+      micBtn.classList.remove('listening');
+      micBtn.textContent = '🎤';
+      setTimeout(() => document.getElementById('voiceStatus').classList.remove('show'), 1800);
+    }
+
+    // ── TTS ──
+    let currentAudio = null;
+    const translateCache = {};   // cache so same card doesn't re-translate
+
+    function stopAll() {
+      window.speechSynthesis && window.speechSynthesis.cancel();
+      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+    }
+
+    // 🔊 EN — read English text
+    function speakEnglish(englishText, btnEl) {
+      stopAll();
+      setBtnState(btnEl, true, '🔊');
+      
+      // Chrome has a bug where utterances > ~200 chars are silently dropped or cancel halfway.
+      // We chunk by sentences.
+      const sentences = englishText.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [englishText];
+      let i = 0;
+      
+      function speakNext() {
+        if (i >= sentences.length) {
+          setBtnState(btnEl, false);
+          return;
+        }
+        const utter = new SpeechSynthesisUtterance(sentences[i].trim());
+        utter.lang = 'en-IN';
+        utter.rate = 0.88;
+        const voices = window.speechSynthesis.getVoices();
+        const v = voices.find(v => v.lang === 'en-IN') || voices.find(v => v.lang.startsWith('en'));
+        if (v) utter.voice = v;
+        
+        utter.onend = () => { i++; speakNext(); };
+        utter.onerror = () => { i++; speakNext(); };
+        window.speechSynthesis.speak(utter);
+      }
+      
+      speakNext();
+    }
+
+    // 🔊 தமிழ் — translate English→Tamil first, then speak
+    async function speakTamilTranslated(englishText, btnEl) {
+      stopAll();
+      setBtnState(btnEl, true, '⏳');
+
+      try {
+        let tamilText = translateCache[englishText];
+
+        if (!tamilText) {
+          try {
+            const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ta&dt=t&q=${encodeURIComponent(englishText)}`;
+            const res = await fetch(url);
+            const data = await res.json();
+            let translated = '';
+            if (data && data[0]) {
+               for (let j = 0; j < data[0].length; j++) {
+                 if (data[0][j][0]) translated += data[0][j][0];
+               }
+            }
+            tamilText = translated || englishText;
+            translateCache[englishText] = tamilText;
+          } catch(err) {
+            console.error("Translation API error", err);
+            tamilText = englishText;
+          }
+        }
+
+        setBtnState(btnEl, true, '🔊');
+
+        // Play via Google Translate TTS audio in chunks ≤ 190 chars
+        const chunks = chunkText(tamilText, 190);
+        await playChunksAsync(chunks);
+
+      } catch (e) {
+        console.error('TTS error:', e);
+        // Fallback to browser TTS
+        const sentences = englishText.match(/[^.!?]+[.!?]+|\s*[^.!?]+$/g) || [englishText];
+        let i = 0;
+        function speakNext() {
+          if (i >= sentences.length) { setBtnState(btnEl, false); return; }
+          const utter = new SpeechSynthesisUtterance(sentences[i].trim());
+          utter.lang = 'ta-IN';
+          utter.rate = 0.85;
+          utter.onend = () => { i++; speakNext(); };
+          utter.onerror = () => { i++; speakNext(); };
+          window.speechSynthesis.speak(utter);
+        }
+        speakNext();
+        return;
+      }
+      
+      setBtnState(btnEl, false);
+    }
+
+    function setBtnState(btn, active, icon) {
+      if (!btn) return;
+      if (active) {
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        if (icon) btn.textContent = icon + ' ' + btn.dataset.label;
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.textContent = '🔊 ' + btn.dataset.label;
+      }
+    }
+
+    function chunkText(text, maxLen) {
+      const words = text.split(' ');
+      const chunks = []; let cur = '';
+      for (const w of words) {
+        if ((cur + ' ' + w).length > maxLen && cur) { chunks.push(cur.trim()); cur = w; }
+        else cur += (cur ? ' ' : '') + w;
+      }
+      if (cur) chunks.push(cur.trim());
+      return chunks;
+    }
+
+    function playChunksAsync(chunks) {
+      return new Promise((resolve) => {
+        let idx = 0;
+        function next() {
+          if (idx >= chunks.length) { resolve(); return; }
+          const encoded = encodeURIComponent(chunks[idx++]);
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=ta&client=tw-ob&q=${encoded}`;
+          currentAudio = new Audio(url);
+          currentAudio.onended = next;
+          currentAudio.onerror = () => {
+            // Google TTS blocked — fallback to browser
+            const u = new SpeechSynthesisUtterance(chunks.slice(idx - 1).join(' '));
+            u.lang = 'ta-IN'; u.rate = 0.85;
+            u.onend = resolve;
+            window.speechSynthesis.speak(u);
+          };
+          currentAudio.play().catch(() => {
+            const u = new SpeechSynthesisUtterance(chunks.join(' '));
+            u.lang = 'ta-IN'; u.rate = 0.85;
+            u.onend = resolve;
+            window.speechSynthesis.speak(u);
+          });
+        }
+        next();
+      });
+    }
+
+    // ── QUICK CHIP ──
+    function quickSearch(q) {
+      document.getElementById('query').value = q;
+      search();
+    }
+
+    // ── SEARCH ──
+    async function search() {
+      const query = document.getElementById('query').value.trim();
+      if (!query) return;
+
+      const L = LANGS[currentLang];
+      const resultDiv = document.getElementById('result');
+      const divider = document.getElementById('resultDivider');
+
+      divider.style.display = 'flex';
+      resultDiv.innerHTML = `
+      <div class="state-box">
+        <div class="spinner"></div>
+        <p>${L.searching}</p>
+      </div>`;
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query })
+        });
+
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) {
+          resultDiv.innerHTML = `
+          <div class="state-box">
+            <div class="icon">🔍</div>
+            <p><strong>${L.noResult}</strong></p>
+            <p style="margin-top:6px;font-size:0.82rem">${L.noResultSub}</p>
+          </div>`;
+          return;
+        }
+
+        // Clean raw Python list strings like ['a', 'b'] into readable bullet points
+        function fixRupee(t) {
+          if (!t) return t;
+          return String(t).replace(/\?(?=[\d,])/g, '₹');
+        }
+
+        function cleanText(raw) {
+          if (!raw) return '-';
+          let t = String(raw);
+          t = fixRupee(t);
+          // Remove surrounding [ ] brackets
+          t = t.replace(/^\s*\[/, '').replace(/\]\s*$/, '');
+          // Split Python list items: ', ' or ", "
+          if (t.includes("', '") || t.includes('", "') || t.includes("','") || t.includes('","')) {
+            var parts = t.split(/['"]\s*,\s*['"]/).map(function (s) {
+              return s.replace(/^['"\s]+|['"\s]+$/g, '').trim();
+            }).filter(Boolean);
+            t = parts.map(function (s) { return '• ' + s; }).join('\n');
+          } else {
+            // Remove leftover surrounding quotes
+            t = t.replace(/^['"\s]+|['"\s]+$/g, '').trim();
+          }
+          // Convert literal \n or actual newlines
+          t = t.replace(/\\n/g, '\n');
+          return t;
+        }
+
+        function textToHtml(text) {
+          return cleanText(text).replace(/\n/g, '<br>');
+        }
+
+        let html = '';
+        data.results.forEach((item, i) => {
+          const eligId = 'elig-' + i;
+          const beneId = 'bene-' + i;
+          const descId = 'desc-' + i;
+          const eligClean = cleanText(item.eligibility);
+          const beneClean = cleanText(item.benefits);
+          const descClean = cleanText(item.details || '');
+          const enText = fixRupee(`${item.name}. Description: ${descClean}. Eligibility: ${eligClean}. Benefits: ${beneClean}`);
+
+          html += `
+          <div class="scheme-card" style="animation-delay:${i * 0.06}s">
+            <div class="card-header">
+               <div class="card-index">${i + 1}</div>
+               <div class="card-title">${item.name || 'N/A'}</div>
+            </div>
+            <div class="tts-group card-tts">
+              <button class="tts-btn tts-en" data-label="EN"
+                onclick="speakEnglish(${JSON.stringify(enText)}, this)"
+                title="Read in English">🔊 EN</button>
+              <button class="tts-btn tts-ta" data-label="தமிழ்"
+                onclick="speakTamilTranslated(${JSON.stringify(enText)}, this)"
+                title="தமிழில் மொழிபெயர்த்து கேளுங்கள்">🔊 தமிழ்</button>
+            </div>
+
+            ${descClean && descClean !== '-' ? `
+            <div class="card-section">
+              <div class="section-label" style="color:var(--accent)">📋 ${L.desc || 'விவரங்கள் / Details'}</div>
+              <div class="section-text collapsed" id="${descId}">${textToHtml(item.details)}</div>
+              <button class="read-more" onclick="toggleText('${descId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+            </div>` : ''}
+
+            <div class="card-section">
+              <div class="section-label elig">✅ ${L.elig}</div>
+              <div class="section-text collapsed" id="${eligId}">${textToHtml(item.eligibility)}</div>
+              <button class="read-more" onclick="toggleText('${eligId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+            </div>
+
+            <div class="card-section">
+              <div class="section-label bene">🎁 ${L.bene}</div>
+              <div class="section-text collapsed" id="${beneId}">${textToHtml(item.benefits)}</div>
+              <button class="read-more" onclick="toggleText('${beneId}', this, '${L.more}', '${L.less}')">${L.more} ↓</button>
+            </div>
+
+            ${item.apply_link ? `
+            <div class="card-footer">
+              <a class="apply-btn" href="${item.apply_link}" target="_blank" rel="noopener noreferrer">
+                🔗 விண்ணப்பிக்க / Apply Now
+              </a>
+            </div>` : ''}
+          </div>`;
+        });
+
+        resultDiv.innerHTML = html;
+
+      } catch (err) {
+        resultDiv.innerHTML = `
+        <div class="state-box">
+          <div class="icon">⚠️</div>
+          <p>${L.error}</p>
+        </div>`;
+      }
+    }
+
+    // ── READ MORE TOGGLE ──
+    function toggleText(id, btn, more, less) {
+      const el = document.getElementById(id);
+      if (el.classList.contains('collapsed')) {
+        el.classList.remove('collapsed');
+        btn.textContent = less + ' ↑';
+      } else {
+        el.classList.add('collapsed');
+        btn.textContent = more + ' ↓';
+      }
+    }
+
+    // ── ENTER KEY ──
+    document.getElementById('query').addEventListener('keydown', e => {
+      if (e.key === 'Enter') search();
+    });
+  </script>
+</body>
+
+</html>
