@@ -1,3 +1,5 @@
+import os
+import numpy as np
 import pandas as pd
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -69,8 +71,19 @@ def combine_text(row):
 
 df['combined_text'] = df.apply(combine_text, axis=1)
 
-print("Encoding scheme embeddings...")
-scheme_embeddings = model.encode(df['combined_text'].tolist(), show_progress_bar=True)
+EMBEDDINGS_FILE = "scheme_embeddings.npy"
+if os.path.exists(EMBEDDINGS_FILE):
+    print("Loading cached scheme embeddings...")
+    scheme_embeddings = np.load(EMBEDDINGS_FILE)
+    if len(scheme_embeddings) != len(df):
+        print("Dataset length changed! Re-encoding scheme embeddings...")
+        scheme_embeddings = model.encode(df['combined_text'].tolist(), show_progress_bar=True)
+        np.save(EMBEDDINGS_FILE, scheme_embeddings)
+else:
+    print("Encoding scheme embeddings for the first time...")
+    scheme_embeddings = model.encode(df['combined_text'].tolist(), show_progress_bar=True)
+    np.save(EMBEDDINGS_FILE, scheme_embeddings)
+
 print("✅ Ready!")
 
 # ── Keyword boost map ──

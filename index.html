@@ -57,23 +57,38 @@
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-track {
       background: var(--bg);
     }
+
     ::-webkit-scrollbar-thumb {
       background: var(--card-border);
       border-radius: 4px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--muted);
     }
 
     /* Animated background */
     @keyframes bgGlow {
-      0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
-      50% { transform: scale(1.05) translate(-2%, 2%); opacity: 1; }
-      100% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+      0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.8;
+      }
+
+      50% {
+        transform: scale(1.05) translate(-2%, 2%);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.8;
+      }
     }
+
     body::before {
       content: '';
       position: fixed;
@@ -114,9 +129,17 @@
     }
 
     @keyframes emblemPulse {
-      0% { box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3); transform: translateY(0); }
-      100% { box-shadow: 0 12px 48px rgba(245, 158, 11, 0.6); transform: translateY(-3px); }
+      0% {
+        box-shadow: 0 8px 32px rgba(245, 158, 11, 0.3);
+        transform: translateY(0);
+      }
+
+      100% {
+        box-shadow: 0 12px 48px rgba(245, 158, 11, 0.6);
+        transform: translateY(-3px);
+      }
     }
+
     .emblem {
       width: 72px;
       height: 72px;
@@ -563,7 +586,7 @@
       color: var(--text);
       box-shadow: none;
     }
-    
+
     .apply-btn.secondary:hover {
       background: rgba(245, 158, 11, 0.1);
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
@@ -578,7 +601,7 @@
       display: none;
       animation: fadeDown 0.3s ease both;
     }
-    
+
     .apply-box.open {
       display: block;
     }
@@ -609,7 +632,7 @@
       animation: spin 0.8s linear infinite;
       margin: 0 auto 16px;
     }
-    
+
     /* ── AUDIO CONTROLS ── */
     #audio-controls {
       position: fixed;
@@ -627,6 +650,7 @@
       z-index: 9999;
       animation: fadeUp 0.3s ease both;
     }
+
     .ctrl-btn {
       background: none;
       border: none;
@@ -638,31 +662,48 @@
       justify-content: center;
       transition: transform 0.2s;
     }
+
     .ctrl-btn:hover {
-       transform: scale(1.15);
-       color: var(--accent);
+      transform: scale(1.15);
+      color: var(--accent);
     }
+
     .audio-waves {
-       display: flex;
-       align-items: center;
-       gap: 4px;
-       height: 20px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 20px;
     }
+
     .audio-waves span {
-       display: block;
-       width: 4px;
-       height: 100%;
-       background: var(--accent);
-       border-radius: 2px;
-       animation: wave 1s infinite alternate;
+      display: block;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      animation: wave 1s infinite alternate;
     }
-    .audio-waves.paused span { animation-play-state: paused; }
-    .audio-waves span:nth-child(2) { animation-delay: 0.2s; }
-    .audio-waves span:nth-child(3) { animation-delay: 0.4s; }
-    
+
+    .audio-waves.paused span {
+      animation-play-state: paused;
+    }
+
+    .audio-waves span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .audio-waves span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
     @keyframes wave {
-      0% { height: 20%; }
-      100% { height: 100%; }
+      0% {
+        height: 20%;
+      }
+
+      100% {
+        height: 100%;
+      }
     }
 
     /* ── ANIMATIONS ── */
@@ -753,7 +794,8 @@
 
     <!-- TOP BAR -->
     <div style="display: flex; justify-content: flex-end; padding-top: 16px;">
-      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" style="background:var(--card-bg); border:1px solid var(--card-border); color:var(--text); width: 38px; height: 38px; font-size: 1.1rem; border-radius: 99px;">☀️</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()"
+        style="background:var(--card-bg); border:1px solid var(--card-border); color:var(--text); width: 38px; height: 38px; font-size: 1.1rem; border-radius: 99px;">☀️</button>
     </div>
 
     <!-- HEADER -->
@@ -817,19 +859,19 @@
   </div>
 
   <div id="audio-controls">
-     <div class="audio-waves" id="audio-wave-anim">
-       <span></span><span></span><span></span>
-     </div>
-     <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" title="Pause/Play">⏸️</button>
-     <button class="ctrl-btn" onclick="stopAll()" title="Stop">⏹️</button>
+    <div class="audio-waves" id="audio-wave-anim">
+      <span></span><span></span><span></span>
+    </div>
+    <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" title="Pause/Play">⏸️</button>
+    <button class="ctrl-btn" onclick="stopAll()" title="Stop">⏹️</button>
   </div>
 
   <script>
     // ── THEME CONFIG ──
     function toggleTheme() {
-       const isLight = document.body.classList.toggle('light-theme');
-       localStorage.setItem('govSchemeTheme', isLight ? 'light' : 'dark');
-       document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀️';
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('govSchemeTheme', isLight ? 'light' : 'dark');
+      document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀️';
     }
 
     // ── LANG CONFIG ──
@@ -917,7 +959,7 @@
       document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
       const btn = document.getElementById('btn-' + lang);
       if (btn) btn.classList.add('active');
-      
+
       const L = LANGS[lang];
       document.getElementById('query').placeholder = L.placeholder;
       document.getElementById('resultDivider').textContent = L.divider;
@@ -926,12 +968,12 @@
       document.getElementById('ui-stat2').textContent = L.stats_labels[1];
       document.getElementById('ui-stat3').textContent = L.stats_labels[2];
       document.getElementById('ui-footer').textContent = L.footer;
-      
+
       const chipsHtml = L.chips.map((c, i) => `<div class="chip" onclick="quickSearch('${L.queries[i]}')">${c}</div>`).join('');
       document.getElementById('ui-chips').innerHTML = chipsHtml;
 
       if (typeof translateDynamicResults === 'function') {
-         translateDynamicResults(lang);
+        translateDynamicResults(lang);
       }
     }
 
@@ -1034,45 +1076,48 @@
 
     // ── TTS ──
     let currentAudio = null;
-    const translateCache = {};   // cache so same card doesn't re-translate
+    const translateCache = {};
     let isSpeechPaused = false;
 
     function showAudioControls() {
-        const ctrl = document.getElementById('audio-controls');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const wave = document.getElementById('audio-wave-anim');
-        if (ctrl) ctrl.style.display = 'flex';
+      const ctrl = document.getElementById('audio-controls');
+      const pauseBtn = document.getElementById('pauseBtn');
+      const wave = document.getElementById('audio-wave-anim');
+      if (ctrl) ctrl.style.display = 'flex';
+      isSpeechPaused = false;
+      if (pauseBtn) pauseBtn.textContent = '⏸️';
+      if (wave) wave.classList.remove('paused');
+    }
+
+    function hideAudioControls() {
+      const ctrl = document.getElementById('audio-controls');
+      if (ctrl) ctrl.style.display = 'none';
+      isSpeechPaused = false;
+    }
+
+    function togglePauseSynthesis() {
+      const pauseBtn = document.getElementById('pauseBtn');
+      const wave = document.getElementById('audio-wave-anim');
+
+      if (isSpeechPaused) {
+        window.speechSynthesis && window.speechSynthesis.resume();
+        if (currentAudio) currentAudio.play();
         isSpeechPaused = false;
         if (pauseBtn) pauseBtn.textContent = '⏸️';
         if (wave) wave.classList.remove('paused');
-    }
-    
-    function hideAudioControls() {
-        const ctrl = document.getElementById('audio-controls');
-        if (ctrl) ctrl.style.display = 'none';
-        isSpeechPaused = false;
-    }
-    
-    function togglePauseSynthesis() {
-        const pauseBtn = document.getElementById('pauseBtn');
-        const wave = document.getElementById('audio-wave-anim');
-        
-        if (isSpeechPaused) {
-           window.speechSynthesis && window.speechSynthesis.resume();
-           if (currentAudio) currentAudio.play();
-           isSpeechPaused = false;
-           if (pauseBtn) pauseBtn.textContent = '⏸️';
-           if (wave) wave.classList.remove('paused');
-        } else {
-           window.speechSynthesis && window.speechSynthesis.pause();
-           if (currentAudio) currentAudio.pause();
-           isSpeechPaused = true;
-           if (pauseBtn) pauseBtn.textContent = '▶️';
-           if (wave) wave.classList.add('paused');
-        }
+      } else {
+        window.speechSynthesis && window.speechSynthesis.pause();
+        if (currentAudio) currentAudio.pause();
+        isSpeechPaused = true;
+        if (pauseBtn) pauseBtn.textContent = '▶️';
+        if (wave) wave.classList.add('paused');
+      }
     }
 
+    let ttsSession = 0;
+
     function stopAll() {
+      ttsSession++;
       window.speechSynthesis && window.speechSynthesis.cancel();
       if (currentAudio) { currentAudio.pause(); currentAudio = null; }
       hideAudioControls();
@@ -1080,12 +1125,15 @@
 
     // Helper to sequentially speak chunks using Browser TTS safely
     function speakChunksBrowserSync(text, langCode, rate, btnEl) {
+      ttsSession++;
+      let currentSession = ttsSession;
       showAudioControls();
       // Chunk text safely to avoid Chrome dropping bug
       const chunks = chunkText(text, 150);
       let i = 0;
 
       function speakNext() {
+        if (currentSession !== ttsSession) return;
         while (i < chunks.length && !chunks[i].trim()) i++;
         if (i >= chunks.length) {
           if (btnEl) setBtnState(btnEl, false);
@@ -1096,14 +1144,9 @@
         const utter = new SpeechSynthesisUtterance(chunks[i].trim());
         utter.lang = langCode;
         utter.rate = rate;
-        
-        let timeout = setTimeout(() => {
-          utter.onend = null;
-          i++; speakNext();
-        }, Math.max(3000, chunks[i].length * 100));
 
-        utter.onend = () => { clearTimeout(timeout); i++; speakNext(); };
-        utter.onerror = () => { clearTimeout(timeout); i++; speakNext(); };
+        utter.onend = () => { if (currentSession === ttsSession) { i++; speakNext(); } };
+        utter.onerror = () => { if (currentSession === ttsSession) { i++; speakNext(); } };
 
         window.speechSynthesis.speak(utter);
       }
@@ -1149,7 +1192,7 @@
         const chunks = chunkText(tamilText, 190);
         const result = await playChunksAsync(chunks);
         if (result === "fallback") throw new Error("Audio blocked");
-        
+
         setBtnState(btnEl, false);
       } catch (e) {
         console.error('TTS error:', e);
@@ -1183,9 +1226,12 @@
     }
 
     function playChunksAsync(chunks) {
+      ttsSession++;
+      let currentSession = ttsSession;
       return new Promise((resolve) => {
         let idx = 0;
         function next() {
+          if (currentSession !== ttsSession) { resolve("canceled"); return; }
           while (idx < chunks.length && !chunks[idx].trim()) idx++;
           if (idx >= chunks.length) { resolve(); return; }
           const encoded = encodeURIComponent(chunks[idx++].trim());
@@ -1198,7 +1244,7 @@
         }
         next();
       }).then((res) => {
-        if (res !== "fallback") hideAudioControls();
+        if (res !== "fallback" && res !== "canceled") hideAudioControls();
         return res;
       });
     }
@@ -1352,7 +1398,7 @@
 
         // Kick off translation for the new cards immediately
         if (typeof translateDynamicResults === 'function') {
-           translateDynamicResults(currentLang);
+          translateDynamicResults(currentLang);
         }
 
       } catch (err) {
@@ -1365,35 +1411,35 @@
     }
 
     function toggleApplyBox(id, btn) {
-       stopAll();
-       const box = document.getElementById(id);
-       const isOpen = box.classList.contains('open');
-       
-       if (isOpen) {
-          box.classList.remove('open');
-          setBtnState(btn, false);
-       } else {
-          // Close others
-          document.querySelectorAll('.apply-box.open').forEach(b => b.classList.remove('open'));
-          
-          box.classList.add('open');
-          setBtnState(btn, true, '🔊');
-          
-          let fullText = '';
-          const stepsL = box.querySelector('.apply-steps');
-          const docsL = box.querySelector('.doc-req');
-          const textBlocks = box.querySelectorAll('.section-text');
-          
-          if (stepsL && textBlocks[0]) fullText += stepsL.innerText + '. ' + textBlocks[0].innerText + '. ';
-          if (docsL && textBlocks.length > 1) fullText += docsL.innerText + '. ' + textBlocks[1].innerText + '. ';
-          else if (docsL && textBlocks.length === 1 && !stepsL) fullText += docsL.innerText + '. ' + textBlocks[0].innerText + '. ';
-          
-          let langCode = 'en-IN';
-          if (currentLang === 'ta') langCode = 'ta-IN';
-          if (currentLang === 'hi') langCode = 'hi-IN';
-          
-          speakChunksBrowserSync(fullText, langCode, 0.85, btn);
-       }
+      stopAll();
+      const box = document.getElementById(id);
+      const isOpen = box.classList.contains('open');
+
+      if (isOpen) {
+        box.classList.remove('open');
+        setBtnState(btn, false);
+      } else {
+        // Close others
+        document.querySelectorAll('.apply-box.open').forEach(b => b.classList.remove('open'));
+
+        box.classList.add('open');
+        setBtnState(btn, true, '🔊');
+
+        let fullText = '';
+        const stepsL = box.querySelector('.apply-steps');
+        const docsL = box.querySelector('.doc-req');
+        const textBlocks = box.querySelectorAll('.section-text');
+
+        if (stepsL && textBlocks[0]) fullText += stepsL.innerText + '. ' + textBlocks[0].innerText + '. ';
+        if (docsL && textBlocks.length > 1) fullText += docsL.innerText + '. ' + textBlocks[1].innerText + '. ';
+        else if (docsL && textBlocks.length === 1 && !stepsL) fullText += docsL.innerText + '. ' + textBlocks[0].innerText + '. ';
+
+        let langCode = 'en-IN';
+        if (currentLang === 'ta') langCode = 'ta-IN';
+        if (currentLang === 'hi') langCode = 'hi-IN';
+
+        speakChunksBrowserSync(fullText, langCode, 0.85, btn);
+      }
     }
 
     // ── READ MORE TOGGLE ──
@@ -1403,14 +1449,14 @@
       if (el.classList.contains('collapsed')) {
         el.classList.remove('collapsed');
         btn.textContent = L.less + ' ↑';
-        
+
         // Auto-narrate content when expanded!
         stopAll();
         let langCode = 'en-IN';
         if (currentLang === 'ta') langCode = 'ta-IN';
         if (currentLang === 'hi') langCode = 'hi-IN';
         speakChunksBrowserSync(el.innerText, langCode, 0.85, null);
-        
+
       } else {
         el.classList.add('collapsed');
         btn.textContent = L.more + ' ↓';
@@ -1422,7 +1468,7 @@
     async function translateToLang(text, targetLang) {
       if (!text || text === '-') return text;
       if (targetLang === 'en') return text;
-      
+
       const cacheKey = targetLang + ':' + text;
       if (translateCache[cacheKey]) return translateCache[cacheKey];
 
@@ -1446,50 +1492,50 @@
     }
 
     async function translateDynamicResults(targetLang) {
-       const L = LANGS[targetLang];
-       const resultDiv = document.getElementById('result');
-       if (!resultDiv) return;
+      const L = LANGS[targetLang];
+      const resultDiv = document.getElementById('result');
+      if (!resultDiv) return;
 
-       // Translate labels instantly
-       document.querySelectorAll('.section-label.elig').forEach(el => el.innerHTML = `✅ ${L.elig}`);
-       document.querySelectorAll('.section-label.bene').forEach(el => el.innerHTML = `🎁 ${L.bene}`);
-       document.querySelectorAll('.section-label.desc').forEach(el => el.innerHTML = `📋 ${L.desc}`);
-       document.querySelectorAll('.section-label.apply-steps').forEach(el => el.innerHTML = `📋 ${L.apply_steps}`);
-       document.querySelectorAll('.section-label.doc-req').forEach(el => el.innerHTML = `📄 ${L.doc_req}`);
-       
-       document.querySelectorAll('.read-more').forEach(el => {
-          if (el.textContent.includes('↓')) el.textContent = `${L.more} ↓`;
-          else el.textContent = `${L.less} ↑`;
-       });
-       document.querySelectorAll('.apply-btn:not(.secondary)').forEach(el => el.innerHTML = L.apply_btn);
-       document.querySelectorAll('.apply-btn.secondary').forEach(el => {
-          el.dataset.label = L.apply_how;
-          if (!el.disabled) el.innerHTML = L.apply_how;
-          else el.innerHTML = '🔊 ' + L.apply_how;
-       });
+      // Translate labels instantly
+      document.querySelectorAll('.section-label.elig').forEach(el => el.innerHTML = `✅ ${L.elig}`);
+      document.querySelectorAll('.section-label.bene').forEach(el => el.innerHTML = `🎁 ${L.bene}`);
+      document.querySelectorAll('.section-label.desc').forEach(el => el.innerHTML = `📋 ${L.desc}`);
+      document.querySelectorAll('.section-label.apply-steps').forEach(el => el.innerHTML = `📋 ${L.apply_steps}`);
+      document.querySelectorAll('.section-label.doc-req').forEach(el => el.innerHTML = `📄 ${L.doc_req}`);
 
-       if (targetLang === 'en') {
-          document.querySelectorAll('.card-title, .section-text').forEach(el => {
-             if (el.dataset.origText) el.innerHTML = el.dataset.origText.replace(/\n/g, '<br>');
-          });
-          return;
-       }
+      document.querySelectorAll('.read-more').forEach(el => {
+        if (el.textContent.includes('↓')) el.textContent = `${L.more} ↓`;
+        else el.textContent = `${L.less} ↑`;
+      });
+      document.querySelectorAll('.apply-btn:not(.secondary)').forEach(el => el.innerHTML = L.apply_btn);
+      document.querySelectorAll('.apply-btn.secondary').forEach(el => {
+        el.dataset.label = L.apply_how;
+        if (!el.disabled) el.innerHTML = L.apply_how;
+        else el.innerHTML = '🔊 ' + L.apply_how;
+      });
 
-       // Translate dynamic texts asynchronously
-       const elements = document.querySelectorAll('.card-title, .section-text');
-       for (let el of elements) {
-          if (el.dataset.translated === targetLang) continue;
-          
-          let origText = el.dataset.origText;
-          if (!origText) {
-             origText = el.innerText;
-             el.dataset.origText = origText;
-          }
+      if (targetLang === 'en') {
+        document.querySelectorAll('.card-title, .section-text').forEach(el => {
+          if (el.dataset.origText) el.innerHTML = el.dataset.origText.replace(/\n/g, '<br>');
+        });
+        return;
+      }
 
-          let translatedText = await translateToLang(origText, targetLang);
-          el.innerHTML = translatedText.replace(/\n/g, '<br>');
-          el.dataset.translated = targetLang;
-       }
+      // Translate dynamic texts asynchronously
+      const elements = document.querySelectorAll('.card-title, .section-text');
+      for (let el of elements) {
+        if (el.dataset.translated === targetLang) continue;
+
+        let origText = el.dataset.origText;
+        if (!origText) {
+          origText = el.innerText;
+          el.dataset.origText = origText;
+        }
+
+        let translatedText = await translateToLang(origText, targetLang);
+        el.innerHTML = translatedText.replace(/\n/g, '<br>');
+        el.dataset.translated = targetLang;
+      }
     }
 
     // ── INITIALIZATION ──
@@ -1499,8 +1545,8 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('govSchemeTheme') === 'light') {
-         document.body.classList.add('light-theme');
-         document.getElementById('themeBtn').textContent = '🌙';
+        document.body.classList.add('light-theme');
+        document.getElementById('themeBtn').textContent = '🌙';
       }
       const savedLang = localStorage.getItem('govSchemeLang') || 'ta';
       setLang(savedLang);
