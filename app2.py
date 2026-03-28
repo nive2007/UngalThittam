@@ -16,6 +16,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+from fastapi.responses import FileResponse
+
+@app.get("/")
+async def serve_home():
+    return FileResponse("index.html", media_type="text/html")
+
+@app.get("/style.css")
+async def serve_css():
+    return FileResponse("style.css", media_type="text/css")
+
+@app.get("/app.js")
+async def serve_js():
+    return FileResponse("app.js", media_type="application/javascript")
+
 # ── Load dataset ──
 df = pd.read_csv("schemes.csv", encoding="latin1", engine="python", on_bad_lines="skip")
 df.columns = df.columns.str.strip().str.lower()
@@ -26,7 +40,7 @@ def fix_rupee(val):
     if isinstance(val, str):
         return _re.sub(r'\?(?=[\d,])', '\u20b9', val)
     return val
-df = df.applymap(fix_rupee)
+df = df.map(fix_rupee)
 
 # ── Load model ──
 print("Loading AI model...")
