@@ -4,39 +4,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description"
-    content="AI-powered Indian Government Scheme Search — search 1000+ schemes in Tamil, English & Hindi with voice input." />
+  <meta name="description" content="AI-powered Indian Government Scheme Search — search 1000+ schemes in Tamil, English & Hindi with voice input." />
   <title>அரசு திட்டங்கள் AI | GovScheme AI</title>
+
   <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap"
     rel="stylesheet" />
+
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
+
 </head>
 
 <body>
+
   <!-- Indian Tricolor Top Bar (like govt portals) -->
   <div class="tricolor-bar"></div>
-  <div class="container">
+
+  <div class="container max-w-wide">
+
     <!-- ── HEADER ── -->
     <header>
       <div class="gov-header-band">
+
         <!-- Theme Toggle -->
         <div style="position:absolute; top:14px; right:16px; z-index:2;">
-          <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
+          <button class="icon-btn" id="themeBtn" onclick="toggleTheme()"
+            style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
                    color:#fff; width:36px; height:36px; font-size:1rem; border-radius:8px;">☀️</button>
         </div>
+
         <div class="gov-badge">🇮🇳 &nbsp; Government of India · அரசு திட்டங்கள்</div>
         <div class="emblem">🏛️</div>
         <h1>அரசு திட்டங்கள் <span>AI</span></h1>
         <p id="ui-subtitle">குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்</p>
+
       </div>
     </header>
 
-    <!-- ── MAIN CONTENT ── -->
-    <div class="main-content">
-      <!-- Language Toggle -->
+    <!-- ── APP GRID ── -->
+    <div class="app-grid">
+      
+      <!-- ── SIDEBAR ── -->
+      <aside class="profile-sidebar" id="sidebar">
+        <div class="sidebar-box glass-panel">
+          <div class="profile-header">
+            <div class="avatar">👤</div>
+            <h3 id="aside-name" style="margin-top:8px;">Guest User</h3>
+            <p id="aside-sub" style="font-size: 0.8rem; color: var(--muted);">Profile Incomplete</p>
+          </div>
+          <div class="progress-wrap" id="progWrap" style="display:none; margin-top:16px;">
+            <div class="prog-text" style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px; font-weight:600;"><span id="progLabel">Completion</span> <span id="progValue" style="color:var(--accent);">0%</span></div>
+            <div class="prog-bar-bg" style="height:6px; background:rgba(255,103,19,0.1); border-radius:3px; overflow:hidden;"><div class="prog-bar-fill" id="progFill" style="height:100%; width:0%; background:var(--accent); transition:width 0.4s;"></div></div>
+          </div>
+          <button class="apply-btn w-full" style="margin-top: 20px; width:100%; justify-content:center;" onclick="openProfileModal()" id="btn-login">Login / Setup</button>
+          
+          <div class="privacy-note" style="margin-top:20px; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 12px;">
+            <label style="display: flex; gap: 8px; align-items: flex-start;">
+              <input type="checkbox" id="privacy-toggle" checked disabled style="margin-top:3px;" />
+              <span id="ui-privacy-txt"><strong>Data Privacy:</strong> All data is stored locally safely via Privacy by Design.</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- ── MAIN CONTENT ── -->
+      <div class="main-content">
+
+        <!-- Language Toggle -->
       <div class="lang-toggle">
         <button class="lang-btn active" onclick="setLang('ta')" id="btn-ta">தமிழ்</button>
         <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
@@ -50,8 +86,10 @@
         <button class="icon-btn mic-btn" id="micBtn" onclick="startVoice()" title="குரல் உள்ளீடு">🎤</button>
         <button class="icon-btn search-btn" onclick="search()" title="தேடு">→</button>
       </div>
+
       <!-- Voice Status -->
       <div class="voice-status" id="voiceStatus">🎙️ கேட்கிறேன்... பேசுங்கள்</div>
+
       <!-- Quick Chips -->
       <div class="chips" id="ui-chips">
         <div class="chip" onclick="quickSearch('விவசாயிகள் திட்டங்கள்')">🌾 விவசாயிகள்</div>
@@ -61,8 +99,9 @@
         <div class="chip" onclick="quickSearch('health scheme elderly')">🏥 முதியோர்</div>
         <div class="chip" onclick="quickSearch('housing scheme poor')">🏠 வீட்டு உதவி</div>
       </div>
-      <!-- Stats Bar -->
-      <div class="stats">
+
+      <!-- Dashboard Stats / Profile Summary Replacement -->
+      <div class="stats" id="stats-bar">
         <div class="stat-card">
           <div class="num">1000+</div>
           <div class="label" id="ui-stat1">திட்டங்கள்</div>
@@ -76,25 +115,146 @@
           <div class="label" id="ui-stat3">மொழிகள்</div>
         </div>
       </div>
+      
+      <div class="profile-dashboard glass-panel" id="profile-dashboard" style="display:none; margin-top:24px; padding:20px; border-radius:12px; border:1px solid var(--card-border);">
+        <h3 style="margin-bottom: 4px; font-size:1.1rem; color:var(--accent);" id="ui-rec-title">⭐ Top Recommended for You</h3>
+        <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 15px;" id="ui-rec-txt">Based on your age, income, and occupation.</p>
+        <button class="apply-btn w-full" style="width:100%; justify-content:center; background:#ff8c00; color:white; font-size:0.95rem; display:flex; gap:8px;" onclick="checkAllEligible()" id="btn-check-all">
+          <span>🔎</span> <span id="ui-check-all-txt">Check All Eligible Schemes</span>
+        </button>
+      </div>
+
       <!-- Results -->
       <div class="divider" id="resultDivider" style="display:none">முடிவுகள்</div>
       <div id="result"></div>
+
       <!-- Footer -->
       <footer>
         <p id="ui-footer">இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.</p>
       </footer>
+
     </div><!-- /main-content -->
+
+    </div><!-- /app-grid -->
   </div><!-- /container -->
+
+  <!-- Auth / Profile Modal (Advanced 2-Tier Version) -->
+  <div class="modal-overlay" id="profileModal" style="display:none;">
+    <div class="modal-content glass-panel" style="max-width:700px; width:95%; max-height:90vh; overflow-y:auto; position:relative; padding:30px; border-radius:16px;">
+      <button class="close-modal" onclick="closeProfileModal()" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:1.5rem; color:var(--muted); cursor:pointer;">✕</button>
+      <h2 id="ui-modal-title" style="margin-bottom:8px; font-family:var(--tamil-font);">Complete Your Profile</h2>
+      <p id="ui-modal-desc" style="font-size:0.9rem; color:var(--muted); margin-bottom:24px;">Provide details for personalized schemes.</p>
+      
+      <form id="profileForm" onsubmit="saveProfile(event)">
+        
+        <!-- Section 1 -->
+        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Basics & Demographics</h3>
+        <div class="form-group" style="margin-bottom:16px;">
+          <label id="lbl-name">Full Name</label>
+          <input type="text" id="pf-name" required placeholder="User Name" style="width:100%; padding:10px; border:1px solid var(--card-border); border-radius:8px; font-family:var(--body-font);" />
+        </div>
+        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+          <div class="form-group">
+            <label id="lbl-age">Age Bracket</label>
+            <select id="pf-age" required>
+              <option value="">Select...</option>
+              <option value="18-25">18-25</option>
+              <option value="26-35">26-35</option>
+              <option value="36-45">36-45</option>
+              <option value="46-60">46-60</option>
+              <option value="60+">60+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-gender">Gender</label>
+            <select id="pf-gender" required>
+              <option value="">Select...</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Transgender">Transgender</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-income">Annual Income Range</label>
+            <select id="pf-income" required>
+              <option value="">Select...</option>
+              <option value="Below ₹1,00,000">Below ₹1,00,000</option>
+              <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
+              <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
+              <option value="₹5,00,000 - ₹8,00,000">₹5,00,000 - ₹8,00,000</option>
+              <option value="Above ₹8,00,000">Above ₹8,00,000</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-cat">Category</label>
+            <select id="pf-cat" required>
+              <option value="">General</option>
+              <option value="OBC">OBC</option>
+              <option value="SC">SC</option>
+              <option value="ST">ST</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Education & Occupation (L1/L2)</h3>
+        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+          <div class="form-group">
+            <label id="lbl-edu1">Education Level</label>
+            <select id="pf-edu-l1"><option value="">Select...</option></select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-edu2">Field of Study</label>
+            <select id="pf-edu-l2" disabled><option value="">- Wait for L1 -</option></select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-occ1">Occupation Sector</label>
+            <select id="pf-occ-l1"><option value="">Select...</option></select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-occ2">Occupation Role</label>
+            <select id="pf-occ-l2" disabled><option value="">- Wait for L1 -</option></select>
+          </div>
+        </div>
+        
+        <!-- Section 3 -->
+        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Misc</h3>
+        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+          <div class="form-group">
+            <label id="lbl-dis">Disability Status</label>
+            <select id="pf-disabled">
+              <option value="None">None</option>
+              <option value="Visual">Visual</option>
+              <option value="Hearing">Hearing</option>
+              <option value="Locomotor">Locomotor</option>
+              <option value="Intellectual">Intellectual</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="lbl-state">State</label>
+            <select id="pf-state"><option value="">Select...</option></select>
+          </div>
+        </div>
+
+        <button type="submit" class="apply-btn" id="ui-modal-save" style="margin-top: 24px; width: 100%; justify-content:center; font-size:1rem;">Save Profile & Apply</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Floating Audio Controls -->
   <div id="audio-controls">
     <div class="audio-waves" id="audio-wave-anim">
       <span></span><span></span><span></span>
     </div>
+    <button class="ctrl-btn" id="rewindBtn" onclick="rewindSpeech()" title="Rewind">⏪</button>
     <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" title="Pause/Play">⏸️</button>
+    <button class="ctrl-btn" id="forwardBtn" onclick="forwardSpeech()" title="Forward">⏩</button>
     <button class="ctrl-btn" onclick="stopAll()" title="Stop">⏹️</button>
   </div>
+
   <!-- JavaScript -->
-  <script src="script.js"></script>
+  <script src="app.js"></script>
+
 </body>
 
 </html>
