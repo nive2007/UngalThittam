@@ -19,24 +19,31 @@
 
 <body>
 
+  <!-- Skip Navigation Link (WCAG 2.4.1) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ARIA Live Region for status announcements -->
+  <div id="aria-live-region" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
   <!-- Indian Tricolor Top Bar (like govt portals) -->
-  <div class="tricolor-bar"></div>
+  <div class="tricolor-bar" role="presentation"></div>
 
   <div class="container max-w-wide">
 
     <!-- ── HEADER ── -->
-    <header>
+    <header role="banner">
       <div class="gov-header-band">
 
         <!-- Theme Toggle -->
         <div style="position:absolute; top:14px; right:16px; z-index:2;">
           <button class="icon-btn" id="themeBtn" onclick="toggleTheme()"
+            aria-label="Switch to light mode"
             style="background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25);
                    color:#fff; width:36px; height:36px; font-size:1rem; border-radius:8px;">☀️</button>
         </div>
 
-        <div class="gov-badge">🇮🇳 &nbsp; Government of India · அரசு திட்டங்கள்</div>
-        <div class="emblem">🏛️</div>
+        <div class="gov-badge" aria-label="Government of India — Indian Government Schemes">🇮🇳 &nbsp; Government of India · அரசு திட்டங்கள்</div>
+        <div class="emblem" role="img" aria-label="Government Emblem">🏛️</div>
         <h1>அரசு திட்டங்கள் <span>AI</span></h1>
         <p id="ui-subtitle">குரல் மூலம் அரசு திட்டங்களை எளிதாக அறியுங்கள்</p>
 
@@ -47,22 +54,24 @@
     <div class="app-grid">
       
       <!-- ── SIDEBAR ── -->
-      <aside class="profile-sidebar" id="sidebar">
-        <div class="sidebar-box glass-panel">
+      <aside class="profile-sidebar" id="sidebar" aria-label="User profile and settings">
+        <div class="sidebar-box glass-panel" role="complementary">
           <div class="profile-header">
-            <div class="avatar">👤</div>
+            <div class="avatar" role="img" aria-label="User avatar">👤</div>
             <h3 id="aside-name" style="margin-top:8px;">Guest User</h3>
             <p id="aside-sub" style="font-size: 0.8rem; color: var(--muted);">Profile Incomplete</p>
           </div>
-          <div class="progress-wrap" id="progWrap" style="display:none; margin-top:16px;">
-            <div class="prog-text" style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px; font-weight:600;"><span id="progLabel">Completion</span> <span id="progValue" style="color:var(--accent);">0%</span></div>
-            <div class="prog-bar-bg" style="height:6px; background:rgba(255,103,19,0.1); border-radius:3px; overflow:hidden;"><div class="prog-bar-fill" id="progFill" style="height:100%; width:0%; background:var(--accent); transition:width 0.4s;"></div></div>
+          <div class="progress-wrap" id="progWrap" style="display:none; margin-top:16px;" role="group" aria-label="Profile completion progress">
+            <div class="prog-text" style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px; font-weight:600;"><span id="progLabel">Completion</span> <span id="progValue" style="color:var(--accent);" aria-live="polite">0%</span></div>
+            <div class="prog-bar-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-labelledby="progLabel" style="height:6px; background:rgba(255,103,19,0.1); border-radius:3px; overflow:hidden;"><div class="prog-bar-fill" id="progFill" style="height:100%; width:0%; background:var(--accent); transition:width 0.4s;"></div></div>
           </div>
-          <button class="apply-btn w-full" style="margin-top: 20px; width:100%; justify-content:center;" onclick="openProfileModal()" id="btn-login">Login / Setup</button>
+          <button class="apply-btn w-full" style="margin-top: 20px; width:100%; justify-content:center;"
+            onclick="openProfileModal()" id="btn-login"
+            aria-haspopup="dialog" aria-controls="profileModal">Login / Setup</button>
           
           <div class="privacy-note" style="margin-top:20px; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 12px;">
-            <label style="display: flex; gap: 8px; align-items: flex-start;">
-              <input type="checkbox" id="privacy-toggle" checked disabled style="margin-top:3px;" />
+            <label style="display: flex; gap: 8px; align-items: flex-start;" for="privacy-toggle">
+              <input type="checkbox" id="privacy-toggle" checked disabled style="margin-top:3px;" aria-label="Data privacy — enabled by default" />
               <span id="ui-privacy-txt"><strong>Data Privacy:</strong> All data is stored locally safely via Privacy by Design.</span>
             </label>
           </div>
@@ -70,162 +79,171 @@
       </aside>
 
       <!-- ── MAIN CONTENT ── -->
-      <div class="main-content">
+      <main class="main-content" id="main-content" role="main">
 
         <!-- Language Toggle -->
-      <div class="lang-toggle">
-        <button class="lang-btn active" onclick="setLang('ta')" id="btn-ta">தமிழ்</button>
-        <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
-        <button class="lang-btn" onclick="setLang('hi')" id="btn-hi">हिंदी</button>
-      </div>
+      <nav class="lang-toggle" aria-label="Language selection">
+        <button class="lang-btn active" onclick="setLang('ta')" id="btn-ta" aria-pressed="true" aria-label="Tamil">தமிழ்</button>
+        <button class="lang-btn" onclick="setLang('en')" id="btn-en" aria-pressed="false" aria-label="English">English</button>
+        <button class="lang-btn" onclick="setLang('hi')" id="btn-hi" aria-pressed="false" aria-label="Hindi">हिंदी</button>
+      </nav>
 
       <!-- Search Bar -->
-      <div class="search-wrap">
-        <span style="font-size:1.1rem; color:var(--muted);">🔎</span>
-        <input type="text" id="query" placeholder="உங்கள் கேள்வியை இங்கே கேளுங்கள்..." />
-        <button class="icon-btn mic-btn" id="micBtn" onclick="startVoice()" title="குரல் உள்ளீடு">🎤</button>
-        <button class="icon-btn search-btn" onclick="search()" title="தேடு">→</button>
+      <div class="search-wrap" role="search">
+        <span style="font-size:1.1rem; color:var(--muted);" aria-hidden="true">🔎</span>
+        <label for="query" class="sr-only">Search government schemes</label>
+        <input type="text" id="query" placeholder="உங்கள் கேள்வியை இங்கே கேளுங்கள்..."
+          aria-label="Search government schemes" autocomplete="off"
+          role="searchbox" aria-haspopup="listbox" />
+        <button class="icon-btn mic-btn" id="micBtn" onclick="startVoice()"
+          aria-label="Start voice input" aria-pressed="false">🎤</button>
+        <button class="icon-btn search-btn" onclick="search()"
+          aria-label="Search">→</button>
       </div>
 
       <!-- Voice Status -->
-      <div class="voice-status" id="voiceStatus">🎙️ கேட்கிறேன்... பேசுங்கள்</div>
+      <div class="voice-status" id="voiceStatus" role="status" aria-live="polite">🎙️ கேட்கிறேன்... பேசுங்கள்</div>
 
       <!-- Quick Chips -->
-      <div class="chips" id="ui-chips">
-        <div class="chip" onclick="quickSearch('விவசாயிகள் திட்டங்கள்')">🌾 விவசாயிகள்</div>
-        <div class="chip" onclick="quickSearch('மாணவர் உதவித்தொகை')">🎓 மாணவர்கள்</div>
-        <div class="chip" onclick="quickSearch('பெண்களுக்கான திட்டங்கள்')">👩 பெண்கள்</div>
-        <div class="chip" onclick="quickSearch('loan subsidy scheme')">💰 கடன் திட்டங்கள்</div>
-        <div class="chip" onclick="quickSearch('health scheme elderly')">🏥 முதியோர்</div>
-        <div class="chip" onclick="quickSearch('housing scheme poor')">🏠 வீட்டு உதவி</div>
+      <div class="chips" id="ui-chips" role="group" aria-label="Quick search categories">
+        <button class="chip" onclick="quickSearch('விவசாயிகள் திட்டங்கள்')" aria-label="Search farmers schemes">🌾 விவசாயிகள்</button>
+        <button class="chip" onclick="quickSearch('மாணவர் உதவித்தொகை')" aria-label="Search student scholarships">🎓 மாணவர்கள்</button>
+        <button class="chip" onclick="quickSearch('பெண்களுக்கான திட்டங்கள்')" aria-label="Search women schemes">👩 பெண்கள்</button>
+        <button class="chip" onclick="quickSearch('loan subsidy scheme')" aria-label="Search loan schemes">💰 கடன் திட்டங்கள்</button>
+        <button class="chip" onclick="quickSearch('health scheme elderly')" aria-label="Search elderly health schemes">🏥 முதியோர்</button>
+        <button class="chip" onclick="quickSearch('housing scheme poor')" aria-label="Search housing assistance">🏠 வீட்டு உதவி</button>
       </div>
 
       <!-- Dashboard Stats / Profile Summary Replacement -->
-      <div class="stats" id="stats-bar">
+      <div class="stats" id="stats-bar" role="region" aria-label="Platform statistics">
         <div class="stat-card">
-          <div class="num">1000+</div>
+          <div class="num" aria-hidden="true">1000+</div>
           <div class="label" id="ui-stat1">திட்டங்கள்</div>
         </div>
         <div class="stat-card">
-          <div class="num">AI</div>
+          <div class="num" aria-hidden="true">AI</div>
           <div class="label" id="ui-stat2">திறன் வாய்ந்த தேடல்</div>
         </div>
         <div class="stat-card">
-          <div class="num">3</div>
+          <div class="num" aria-hidden="true">3</div>
           <div class="label" id="ui-stat3">மொழிகள்</div>
         </div>
       </div>
       
-      <div class="profile-dashboard glass-panel" id="profile-dashboard" style="display:none; margin-top:24px; padding:20px; border-radius:12px; border:1px solid var(--card-border);">
+      <div class="profile-dashboard glass-panel" id="profile-dashboard" style="display:none; margin-top:24px; padding:20px; border-radius:12px; border:1px solid var(--card-border);" role="region" aria-label="Personalized scheme recommendations">
         <h3 style="margin-bottom: 4px; font-size:1.1rem; color:var(--accent);" id="ui-rec-title">⭐ Top Recommended for You</h3>
         <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 15px;" id="ui-rec-txt">Based on your age, income, and occupation.</p>
-        <button class="apply-btn w-full" style="width:100%; justify-content:center; background:#ff8c00; color:white; font-size:0.95rem; display:flex; gap:8px;" onclick="checkAllEligible()" id="btn-check-all">
-          <span>🔎</span> <span id="ui-check-all-txt">Check All Eligible Schemes</span>
+        <button class="apply-btn w-full" style="width:100%; justify-content:center; background:#ff8c00; color:white; font-size:0.95rem; display:flex; gap:8px;" onclick="checkAllEligible()" id="btn-check-all" aria-label="Check all government schemes you are eligible for">
+          <span aria-hidden="true">🔎</span> <span id="ui-check-all-txt">Check All Eligible Schemes</span>
         </button>
       </div>
 
       <!-- Results -->
-      <div class="divider" id="resultDivider" style="display:none">முடிவுகள்</div>
-      <div id="result"></div>
+      <div class="divider" id="resultDivider" style="display:none" aria-live="polite">முடிவுகள்</div>
+      <div id="result" role="region" aria-label="Search results" aria-live="polite" aria-atomic="false"></div>
 
       <!-- Footer -->
-      <footer>
+      <footer role="contentinfo">
         <p id="ui-footer">இது ஒரு AI உதவியாளர். அரசு திட்டங்களுக்கு அதிகாரப்பூர்வ இணையதளத்தை சரிபார்க்கவும்.</p>
       </footer>
 
-    </div><!-- /main-content -->
+      </main><!-- /main-content -->
 
     </div><!-- /app-grid -->
   </div><!-- /container -->
 
   <!-- Auth / Profile Modal (Advanced 2-Tier Version) -->
-  <div class="modal-overlay" id="profileModal" style="display:none;">
+  <!-- Focus trap sentinels for keyboard navigation -->
+  <div class="modal-overlay" id="profileModal" style="display:none;"
+       role="dialog" aria-modal="true" aria-labelledby="ui-modal-title" aria-describedby="ui-modal-desc">
+    <!-- Focus trap: first sentinel -->
+    <span id="modal-focus-start" tabindex="0" class="sr-only" aria-hidden="true"></span>
     <div class="modal-content glass-panel" style="max-width:700px; width:95%; max-height:90vh; overflow-y:auto; position:relative; padding:30px; border-radius:16px;">
-      <button class="close-modal" onclick="closeProfileModal()" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:1.5rem; color:var(--muted); cursor:pointer;">✕</button>
+      <button class="close-modal" id="modal-close-btn" onclick="closeProfileModal()"
+        aria-label="Close profile dialog"
+        style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:1.5rem; color:var(--muted); cursor:pointer;">✕</button>
       <h2 id="ui-modal-title" style="margin-bottom:8px; font-family:var(--tamil-font);">Complete Your Profile</h2>
       <p id="ui-modal-desc" style="font-size:0.9rem; color:var(--muted); margin-bottom:24px;">Provide details for personalized schemes.</p>
       
-      <form id="profileForm" onsubmit="saveProfile(event)">
+      <form id="profileForm" onsubmit="saveProfile(event)" novalidate>
         
         <!-- Section 1 -->
-        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Basics & Demographics</h3>
-        <div class="form-group" style="margin-bottom:16px;">
-          <label id="lbl-name">Full Name</label>
-          <input type="text" id="pf-name" required placeholder="User Name" style="width:100%; padding:10px; border:1px solid var(--card-border); border-radius:8px; font-family:var(--body-font);" />
-        </div>
-        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
-          <div class="form-group">
-            <label id="lbl-age">Age Bracket</label>
-            <select id="pf-age" required>
-              <option value="">Select...</option>
-              <option value="18-25">18-25</option>
-              <option value="26-35">26-35</option>
-              <option value="36-45">36-45</option>
-              <option value="46-60">46-60</option>
-              <option value="60+">60+</option>
-            </select>
+        <fieldset style="border:none; padding:0; margin:0 0 20px 0;">
+          <legend style="font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px; width:100%;">Basics &amp; Demographics</legend>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label for="pf-name" id="lbl-name">Full Name <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+            <input type="text" id="pf-name" name="pf-name" required placeholder="User Name"
+              aria-required="true" autocomplete="name"
+              style="width:100%; padding:10px; border:1px solid var(--card-border); border-radius:8px; font-family:var(--body-font);" />
           </div>
-          <div class="form-group">
-            <label id="lbl-gender">Gender</label>
-            <select id="pf-gender" required>
-              <option value="">Select...</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Transgender">Transgender</option>
-            </select>
+          <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+            <div class="form-group">
+              <label for="pf-age" id="lbl-age">Age Bracket <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <select id="pf-age" name="pf-age" required aria-required="true">
+                <option value="">Select...</option>
+                <option value="18-25">18-25</option>
+                <option value="26-35">26-35</option>
+                <option value="36-45">36-45</option>
+                <option value="46-60">46-60</option>
+                <option value="60+">60+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pf-gender" id="lbl-gender">Gender <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <select id="pf-gender" name="pf-gender" required aria-required="true">
+                <option value="">Select...</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Transgender">Transgender</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pf-income" id="lbl-income">Annual Income Range <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <select id="pf-income" name="pf-income" required aria-required="true">
+                <option value="">Select...</option>
+                <option value="Below ₹1,00,000">Below ₹1,00,000</option>
+                <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
+                <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
+                <option value="₹5,00,000 - ₹8,00,000">₹5,00,000 - ₹8,00,000</option>
+                <option value="Above ₹8,00,000">Above ₹8,00,000</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pf-cat" id="lbl-cat">Category <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+              <select id="pf-cat" name="pf-cat" required aria-required="true">
+                <option value="">General</option>
+                <option value="OBC">OBC</option>
+                <option value="SC">SC</option>
+                <option value="ST">ST</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group">
-            <label id="lbl-income">Annual Income Range</label>
-            <select id="pf-income" required>
-              <option value="">Select...</option>
-              <option value="Below ₹1,00,000">Below ₹1,00,000</option>
-              <option value="₹1,00,000 - ₹2,50,000">₹1,00,000 - ₹2,50,000</option>
-              <option value="₹2,50,000 - ₹5,00,000">₹2,50,000 - ₹5,00,000</option>
-              <option value="₹5,00,000 - ₹8,00,000">₹5,00,000 - ₹8,00,000</option>
-              <option value="Above ₹8,00,000">Above ₹8,00,000</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label id="lbl-cat">Category</label>
-            <select id="pf-cat" required>
-              <option value="">General</option>
-              <option value="OBC">OBC</option>
-              <option value="SC">SC</option>
-              <option value="ST">ST</option>
-            </select>
-          </div>
-        </div>
+        </fieldset>
 
         <!-- Section 2 -->
-        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Education & Occupation (L1/L2)</h3>
-        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
-          <div class="form-group">
-            <label id="lbl-edu1">Education Level</label>
-            <select id="pf-edu-l1"><option value="">Select...</option></select>
+        <fieldset style="border:none; padding:0; margin:0 0 20px 0;">
+          <legend style="font-size:1rem; font-weight:700; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px; width:100%;">Education &amp; Occupation</legend>
+          <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+            <div class="form-group">
+              <label for="pf-edu-l1" id="lbl-edu1">Education Level</label>
+              <select id="pf-edu-l1" name="pf-edu-l1" aria-controls="pf-edu-l2"><option value="">Select...</option></select>
+            </div>
+            <div class="form-group">
+              <label for="pf-edu-l2" id="lbl-edu2">Field of Study</label>
+              <select id="pf-edu-l2" name="pf-edu-l2" disabled aria-disabled="true"><option value="">- Wait for L1 -</option></select>
+            </div>
+            <div class="form-group">
+              <label for="pf-occ-l1" id="lbl-occ1">Occupation Sector</label>
+              <select id="pf-occ-l1" name="pf-occ-l1" aria-controls="pf-occ-l2"><option value="">Select...</option></select>
+            </div>
+            <div class="form-group">
+              <label for="pf-occ-l2" id="lbl-occ2">Occupation Role</label>
+              <select id="pf-occ-l2" name="pf-occ-l2" disabled aria-disabled="true"><option value="">- Wait for L1 -</option></select>
+            </div>
           </div>
-          <div class="form-group">
-            <label id="lbl-edu2">Field of Study</label>
-            <select id="pf-edu-l2" disabled><option value="">- Wait for L1 -</option></select>
-          </div>
-          <div class="form-group">
-            <label id="lbl-occ1">Occupation Sector</label>
-            <select id="pf-occ-l1"><option value="">Select...</option></select>
-          </div>
-          <div class="form-group">
-            <label id="lbl-occ2">Occupation Role</label>
-            <select id="pf-occ-l2" disabled><option value="">- Wait for L1 -</option></select>
-          </div>
-        </div>
+        </fieldset>
         
         <!-- Section 3 -->
-        <h3 style="font-size:1rem; color:var(--accent); margin-bottom:12px; border-bottom:1px solid #eee; padding-bottom:6px;">Misc</h3>
-        <div class="form-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
-          <div class="form-group">
-            <label id="lbl-dis">Disability Status</label>
-            <select id="pf-disabled">
-              <option value="None">None</option>
-              <option value="Visual">Visual</option>
-              <option value="Hearing">Hearing</option>
               <option value="Locomotor">Locomotor</option>
               <option value="Intellectual">Intellectual</option>
             </select>
@@ -242,14 +260,14 @@
   </div>
 
   <!-- Floating Audio Controls -->
-  <div id="audio-controls">
-    <div class="audio-waves" id="audio-wave-anim">
+  <div id="audio-controls" role="toolbar" aria-label="Audio playback controls">
+    <div class="audio-waves" id="audio-wave-anim" aria-hidden="true">
       <span></span><span></span><span></span>
     </div>
-    <button class="ctrl-btn" id="rewindBtn" onclick="rewindSpeech()" title="Rewind">⏪</button>
-    <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" title="Pause/Play">⏸️</button>
-    <button class="ctrl-btn" id="forwardBtn" onclick="forwardSpeech()" title="Forward">⏩</button>
-    <button class="ctrl-btn" onclick="stopAll()" title="Stop">⏹️</button>
+    <button class="ctrl-btn" id="rewindBtn" onclick="rewindSpeech()" aria-label="Rewind audio">⏪</button>
+    <button class="ctrl-btn" id="pauseBtn" onclick="togglePauseSynthesis()" aria-label="Pause audio" aria-pressed="false">⏸️</button>
+    <button class="ctrl-btn" id="forwardBtn" onclick="forwardSpeech()" aria-label="Forward audio">⏩</button>
+    <button class="ctrl-btn" onclick="stopAll()" aria-label="Stop audio">⏹️</button>
   </div>
 
   <!-- JavaScript -->

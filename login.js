@@ -205,7 +205,7 @@ function showWarning(element, msg) {
   const box = document.getElementById("smart-warning");
   if (!box) return;
   box.innerHTML = `<strong>Notice:</strong> ${msg}`;
-  box.classList.add("show");
+  box.style.display = "block";
   if (element && element.focus) element.focus();
   clearTimeout(warningTimer);
   warningTimer = setTimeout(clearWarning, 6000);
@@ -213,7 +213,7 @@ function showWarning(element, msg) {
 
 function clearWarning() {
   const box = document.getElementById("smart-warning");
-  if (box) box.classList.remove("show");
+  if (box) box.style.display = "none";
 }
 
 // ── Form Submit ──
@@ -223,6 +223,22 @@ function submitProfile(e) {
   const income = document.getElementById("income").value;
   const age = document.getElementById("age").value;
   const occ = document.getElementById("occ-l1").value;
+  const occL2 = document.getElementById("occ-l2").value;
+  const eduL1 = document.getElementById("edu-l1").value;
+
+  // Validate required cascading fields that were enabled
+  if (!occ) {
+    showWarning(document.getElementById("occ-l1"), "Please select an Occupation Sector.");
+    return;
+  }
+  if (!occL2) {
+    showWarning(document.getElementById("occ-l2"), "Please select an Occupation Role.");
+    return;
+  }
+  if (!eduL1) {
+    showWarning(document.getElementById("edu-l1"), "Please select your Education Level.");
+    return;
+  }
 
   // Heuristic edge case
   if (age === "18-25" && income === "Above ₹8,00,000" && occ === "Unemployed") {

@@ -10,12 +10,23 @@
 
 const API_BASE = "";
 
-// ── THEME ──────────────────────────────────────────────────
+// -- THEME ----------------------------------------------------------
 function toggleTheme() {
   const isLight = document.body.classList.toggle('light-theme');
   localStorage.setItem('govSchemeTheme', isLight ? 'light' : 'dark');
-  document.getElementById('themeBtn').textContent = isLight ? '🌙' : '☀️';
+  const btn = document.getElementById('themeBtn');
+  btn.textContent = isLight ? '🌙' : '☀️';
+  btn.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
 }
+
+// -- ARIA LIVE ANNOUNCER --------------------------------------------
+function announce(message) {
+  const region = document.getElementById('aria-live-region');
+  if (!region) return;
+  region.textContent = '';
+  requestAnimationFrame(function() { region.textContent = message; });
+}
+
 
 // ── LANGUAGE CONFIG ─────────────────────────────────────────
 const LANGS = {
@@ -148,9 +159,16 @@ function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('govSchemeLang', lang);
 
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
   const btn = document.getElementById('btn-' + lang);
-  if (btn) btn.classList.add('active');
+  if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
+
+  // Update html lang attribute
+  const htmlEl = document.documentElement;
+  htmlEl.lang = lang === 'hi' ? 'hi' : lang === 'en' ? 'en' : 'ta';
 
   const L = LANGS[lang];
   document.getElementById('query').placeholder            = L.placeholder;
@@ -217,7 +235,7 @@ async function loadProfileFromDB(userId) {
     document.getElementById('aside-sub').textContent = roleStr;
     document.getElementById('btn-login').textContent = LANGS[currentLang].edit_profile;
 
-    // Progress bar
+    // Progress bar — update ARIA
     let filled = 0, total = 8;
     if (userProfile?.age_bracket)          filled++;
     if (userProfile?.gender)               filled++;
@@ -231,6 +249,9 @@ async function loadProfileFromDB(userId) {
     document.getElementById('progWrap').style.display = 'block';
     document.getElementById('progValue').textContent = pct + '%';
     document.getElementById('progFill').style.width = pct + '%';
+    // Update progressbar ARIA attributes
+    const progBar = document.querySelector('.prog-bar-bg[role="progressbar"]');
+    if (progBar) progBar.setAttribute('aria-valuenow', pct);
 
     // Show User ID badge in sidebar
     renderUserIdBadge(data.user_id);
@@ -415,7 +436,15 @@ function openProfileModal() {
   }
   // Open edit modal with pre-filled data
   initForm();
-  document.getElementById('profileModal').style.display = 'flex';
+  const modal = document.getElementById('profileModal');
+  modal.style.display = 'flex';
+  // Move focus to first focusable element in modal
+  setTimeout(() => {
+    const firstFocusable = modal.querySelector('button, input, select, [tabindex]:not([tabindex="-1"])');
+    if (firstFocusable) firstFocusable.focus();
+  }, 50);
+  // Prevent background scroll
+  document.body.style.overflow = 'hidden';
   if (userProfile) {
     const setVal = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
     setVal('pf-name', userProfile.full_name);
@@ -438,7 +467,14 @@ function openProfileModal() {
   }
 }
 
-function closeProfileModal() { document.getElementById('profileModal').style.display = 'none'; }
+function closeProfileModal() {
+  const modal = document.getElementById('profileModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+  // Return focus to the trigger button
+  const trigger = document.getElementById('btn-login');
+  if (trigger) trigger.focus();
+}
 
 async function saveProfile(e) {
   e.preventDefault();
@@ -573,7 +609,9 @@ function startVoice() {
   recognition.onstart = () => {
     isListening = true;
     micBtn.classList.add('listening');
+    micBtn.setAttribute('aria-pressed', 'true');
     micBtn.textContent  = '⏹';
+    micBtn.setAttribute('aria-label', 'Stop voice input');
     status.textContent  = LANGS[currentLang].listening;
     status.classList.add('show');
   };
@@ -624,6 +662,8 @@ function stopVoiceUI() {
   const micBtn = document.getElementById('micBtn');
   micBtn.classList.remove('listening');
   micBtn.textContent = '🎤';
+  micBtn.setAttribute('aria-pressed', 'false');
+  micBtn.setAttribute('aria-label', 'Start voice input');
   setTimeout(() => document.getElementById('voiceStatus').classList.remove('show'), 1800);
 }
 
@@ -655,13 +695,13 @@ function togglePauseSynthesis() {
     window.speechSynthesis && window.speechSynthesis.resume();
     if (currentAudio) currentAudio.play();
     isSpeechPaused = false;
-    if (pauseBtn) pauseBtn.textContent = '⏸️';
+    if (pauseBtn) { pauseBtn.textContent = '⏸️'; pauseBtn.setAttribute('aria-pressed', 'false'); pauseBtn.setAttribute('aria-label', 'Pause audio'); }
     if (wave) wave.classList.remove('paused');
   } else {
     window.speechSynthesis && window.speechSynthesis.pause();
     if (currentAudio) currentAudio.pause();
     isSpeechPaused = true;
-    if (pauseBtn) pauseBtn.textContent = '▶️';
+    if (pauseBtn) { pauseBtn.textContent = '▶️'; pauseBtn.setAttribute('aria-pressed', 'true'); pauseBtn.setAttribute('aria-label', 'Resume audio'); }
     if (wave) wave.classList.add('paused');
   }
 }
@@ -897,7 +937,8 @@ async function search(isCheckAll = false) {
     divider.textContent = L.divider;
   }
 
-  resultDiv.innerHTML = `<div class="state-box"><div class="spinner"></div><p>${L.searching}</p></div>`;
+  resultDiv.innerHTML = `<div class="state-box"><div class="spinner" role="status" aria-label="${L.searching}"></div><p>${L.searching}</p></div>`;
+  announce(L.searching);
 
   try {
     const res = await fetch(`${API_BASE}/ask`, {
@@ -909,6 +950,7 @@ async function search(isCheckAll = false) {
 
     if (!data.results || data.results.length === 0) {
       resultDiv.innerHTML = `<div class="state-box"><div class="icon">🔍</div><p><strong>${L.noResult}</strong></p><p style="margin-top:6px;font-size:0.82rem">${L.noResultSub}</p></div>`;
+      announce(L.noResult);
       return;
     }
 
@@ -1027,6 +1069,10 @@ async function search(isCheckAll = false) {
     });
 
     resultDiv.innerHTML = html;
+    // Clear input after render — enforces one-shot Q&A; each search is independent
+    document.getElementById('query').value = '';
+    // Announce result count to screen readers
+    announce(data.results.length + ' results found');
 
     if (typeof translateDynamicResults === 'function') {
       translateDynamicResults(currentLang);
@@ -1034,6 +1080,7 @@ async function search(isCheckAll = false) {
 
   } catch (err) {
     resultDiv.innerHTML = `<div class="state-box"><div class="icon">⚠️</div><p>${LANGS[currentLang].error}</p></div>`;
+    announce(LANGS[currentLang].error);
   }
 }
 
@@ -1044,10 +1091,14 @@ function toggleApplyBox(id, btn) {
   const isOpen = box.classList.contains('open');
   if (isOpen) {
     box.classList.remove('open');
+    box.setAttribute('aria-hidden', 'true');
+    btn.setAttribute('aria-expanded', 'false');
     setBtnState(btn, false);
   } else {
-    document.querySelectorAll('.apply-box.open').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.apply-box.open').forEach(b => { b.classList.remove('open'); b.setAttribute('aria-hidden', 'true'); });
     box.classList.add('open');
+    box.removeAttribute('aria-hidden');
+    btn.setAttribute('aria-expanded', 'true');
     setBtnState(btn, true, '🔊');
     let fullText = '';
     const stepsL = box.querySelector('.apply-steps');
@@ -1159,4 +1210,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('query').addEventListener('keydown', e => {
     if (e.key === 'Enter') search();
   });
+
+  // Modal keyboard trap
+  var modal = document.getElementById('profileModal');
+  if (modal) {
+    modal.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { closeProfileModal(); return; }
+      if (e.key === 'Tab') {
+        var foc = Array.from(modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled])')).filter(function(el){return el.offsetParent!==null;});
+        if (!foc.length) return;
+        if (e.shiftKey && document.activeElement===foc[0]) { e.preventDefault(); foc[foc.length-1].focus(); }
+        else if (!e.shiftKey && document.activeElement===foc[foc.length-1]) { e.preventDefault(); foc[0].focus(); }
+      }
+    });
+    modal.addEventListener('click', function(e) { if (e.target===modal) closeProfileModal(); });
+  }
 });
