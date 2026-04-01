@@ -69,6 +69,41 @@
             onclick="openProfileModal()" id="btn-login"
             aria-haspopup="dialog" aria-controls="profileModal">Login / Setup</button>
           
+          <!-- ── CHATBOT ── -->
+          <div class="chat-section" id="chat-section">
+            <button class="chat-toggle-btn" id="chatToggleBtn"
+              onclick="toggleChat()"
+              aria-expanded="false"
+              aria-controls="chatBody"
+              aria-label="Open scheme assistant chatbot">
+              <span>🤖 &nbsp;Scheme Assistant</span>
+              <span class="chat-toggle-arrow">▾</span>
+            </button>
+            <div class="chat-body" id="chatBody" role="region" aria-label="Chatbot assistant">
+              <!-- Language pills -->
+              <div class="chat-lang-pills" role="group" aria-label="Chatbot language">
+                <button class="chat-lang-pill active" id="chatPill-ta"
+                  onclick="setChatLang('ta')" aria-pressed="true">தமிழ்</button>
+                <button class="chat-lang-pill" id="chatPill-en"
+                  onclick="setChatLang('en')" aria-pressed="false">English</button>
+              </div>
+              <!-- Messages -->
+              <div class="chat-messages" id="chatMessages"
+                aria-live="polite" aria-label="Chat messages">
+              </div>
+              <!-- Input -->
+              <div class="chat-input-row">
+                <label for="chatInput" class="sr-only">Type your question about government schemes</label>
+                <input type="text" id="chatInput"
+                  placeholder="திட்டம் பற்றி கேளுங்கள்..."
+                  autocomplete="off"
+                  onkeydown="if(event.key==='Enter') chatSend()" />
+                <button class="chat-send-btn" id="chatSendBtn"
+                  onclick="chatSend()" aria-label="Send message">→</button>
+              </div>
+            </div>
+          </div>
+
           <div class="privacy-note" style="margin-top:20px; font-size: 0.75rem; color: var(--muted); border-top: 1px solid var(--card-border); padding-top: 12px;">
             <label style="display: flex; gap: 8px; align-items: flex-start;" for="privacy-toggle">
               <input type="checkbox" id="privacy-toggle" checked disabled style="margin-top:3px;" aria-label="Data privacy — enabled by default" />
@@ -258,6 +293,22 @@
       </form>
     </div>
   </div>
+
+  <!-- Comparison Bar -->
+  <div id="compareBar" class="compare-bar" role="region" aria-label="Compare Schemes" style="display:none;">
+    <span id="compareCountText" class="compare-count" aria-live="polite">0/2 Selected</span>
+    <button class="compare-action-btn" id="compareExeBtn" onclick="openCompareModal()">Compare</button>
+  </div>
+
+  <!-- Comparison Modal -->
+  <div class="modal-overlay" id="compareModal" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="comp-modal-title">
+    <div class="modal-content glass-panel compare-modal-content" style="max-width:900px; width:95%; max-height:90vh; overflow-y:auto; position:relative; padding:30px; border-radius:16px;">
+      <button class="close-modal" aria-label="Close compare dialog" onclick="closeCompareModal()" style="position:absolute; top:15px; right:15px; background:transparent; border:none; font-size:1.5rem; color:var(--muted); cursor:pointer;">✕</button>
+      <h2 id="comp-modal-title" style="margin-bottom:20px; font-family:var(--tamil-font); font-size:1.5rem; color:var(--accent);">Compare Schemes</h2>
+      <div id="compareContainer" class="compare-grid"></div>
+    </div>
+  </div>
+
 
   <!-- Floating Audio Controls -->
   <div id="audio-controls" role="toolbar" aria-label="Audio playback controls">

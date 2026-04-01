@@ -270,6 +270,17 @@
         
         <input type="hidden" id="occ-l3" name="occ-l3" value="Default">
 
+        <fieldset style="border: none; padding: 0; margin-bottom: 30px;">
+          <legend class="form-section-title">E. Family &amp; Dependents</legend>
+          <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">Add household members (spouse, children, elderly parents) to discover household-level schemes.</p>
+          
+          <div id="dependents-container"></div>
+          
+          <button type="button" onclick="addDependentBox()" style="background: transparent; border: 1px dashed var(--gov-saffron); color: var(--gov-navy); font-weight: 600; padding: 10px; border-radius: 6px; width: 100%; cursor: pointer; margin-top: 5px;">
+            + Add Dependent
+          </button>
+        </fieldset>
+
         <div id="smart-warning" role="alert" aria-live="assertive" style="display:none; background:#fff3cd; color:#856404; border:1px solid #ffc107; padding:12px 16px; border-radius:6px; margin-bottom:12px; font-size:0.88rem; transition:all 0.3s;"></div>
         <button type="submit" class="submit-btn" aria-label="Save your profile and apply filters">Save &amp; Apply Filters</button>
       </form>
@@ -290,6 +301,6 @@
 
   </div>
 
-  <script src="login.js"></script>
+  <script src="login.js?v=2"></script>
 </body>
 </html>

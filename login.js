@@ -280,7 +280,12 @@ async function saveAndRedirect() {
     disability: {
       status: document.getElementById("disability").value || "None",
       percentage: document.getElementById("disability-pct").value
-    }
+    },
+    dependents: Array.from(document.querySelectorAll('#dependents-container .dependent-item')).map(item => ({
+      relationship: item.querySelector('.dep-rel').value,
+      age: item.querySelector('.dep-age').value,
+      occupation: item.querySelector('.dep-occ').value
+    }))
   };
 
   // Show loading state on button
@@ -308,4 +313,55 @@ async function saveAndRedirect() {
     showWarning(document.body, "Could not connect to server. Make sure the app is running.");
     if (btn) { btn.disabled = false; btn.textContent = "Save & Apply Filters"; }
   }
+}
+
+// ── Dependents Logic ──
+function addDependentBox() {
+  const container = document.getElementById('dependents-container');
+  const div = document.createElement('div');
+  div.className = 'dependent-item';
+  div.style.background = 'rgba(0, 45, 98, 0.03)';
+  div.style.border = '1px solid var(--border-color)';
+  div.style.padding = '15px';
+  div.style.borderRadius = '8px';
+  div.style.marginBottom = '15px';
+  div.style.position = 'relative';
+
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:10px; right:10px; background:transparent; border:none; color:#D32F2F; cursor:pointer; font-size:1.2rem;" aria-label="Remove dependent">✖</button>
+    <div style="font-weight:700; color:var(--gov-navy); margin-bottom:10px;">Dependent</div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Relationship <span style="color:red">*</span></label>
+        <select class="dep-rel" required>
+          <option value="">Select...</option>
+          <option value="Spouse">Spouse</option>
+          <option value="Child">Child</option>
+          <option value="Elderly Parent">Elderly Parent</option>
+          <option value="Other Dependent">Other Dependent</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Age Bracket <span style="color:red">*</span></label>
+        <select class="dep-age" required>
+          <option value="">Select...</option>
+          <option value="0-18">0-18</option>
+          <option value="19-60">19-60</option>
+          <option value="60+">60+</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:0;">
+      <label>Occupation Status <span style="color:red">*</span></label>
+      <select class="dep-occ" required>
+        <option value="">Select...</option>
+        <option value="Student">Student</option>
+        <option value="Unemployed">Unemployed</option>
+        <option value="Employed">Employed</option>
+        <option value="Homemaker">Homemaker</option>
+        <option value="Retired">Retired</option>
+      </select>
+    </div>
+  `;
+  container.appendChild(div);
 }
