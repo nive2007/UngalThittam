@@ -1120,14 +1120,6 @@ async function search(isCheckAll = false) {
               onclick="toggleApplyBox('apply-box-${i}', this)">
               ${L.apply_how || '📝 How to Apply'}
             </button>` : ''}
-            ${currentUserId && daysLeft >= 0 ? `
-            <button class="track-btn apply-btn secondary"
-              data-scheme="${item.name}"
-              style="${isTracked ? 'opacity:0.65;' : ''}"
-              ${isTracked ? 'disabled' : ''}
-              onclick="trackApplication('${safeItemName}', ${JSON.stringify(JSON.stringify({name: item.name, ministry: item.ministry, apply_link: item.apply_link}))})">
-              ${isTracked ? L.tracked : L.track_apply}
-            </button>` : ''}
             
             ${daysLeft >= 0 ? `
             <button class="remind-btn" id="remind-btn-${i}" onclick="setReminder(${i}, this)">
